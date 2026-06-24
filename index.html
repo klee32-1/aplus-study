@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A+ Strata &mdash; CompTIA A+ Core 1 &amp; 2 Field Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E7DDC8;        /* warm sand canvas */
+  --paper-2:#F2EBDA;      /* card */
+  --paper-3:#F8F3E7;      /* lightest surface */
+  --ink:#2B2218;          /* espresso text */
+  --ink-2:#5C5142;        /* muted brown */
+  --ink-3:#938straight;   /* faint (overwritten below) */
+  --ink-3:#94886F;        /* faint label */
+  --clay:#A65A38;         /* terracotta accent */
+  --clay-deep:#8A4A2E;
+  --moss:#5D6745;         /* deep olive: core2 / done */
+  --moss-deep:#49512F;
+  --ochre:#B6862B;        /* golden ochre: exam tips */
+  --ochre-soft:#E8DDB8;
+  --line:#D6C9AC;         /* hairline */
+  --line-soft:#E0D5BC;
+  --stone:#CDBF9F;
+  --shadow:0 1px 0 rgba(43,34,24,.04), 0 8px 28px -18px rgba(43,34,24,.35);
+  --rad:3px;
+  --sidebar:316px;
+  --disp:"Bricolage Grotesque", system-ui, sans-serif;
+  --body:"Newsreader", Georgia, serif;
+  --mono:"JetBrains Mono", ui-monospace, monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--body); font-size:17px; line-height:1.62;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+button{font-family:inherit; cursor:pointer; border:none; background:none; color:inherit}
+::selection{background:var(--clay); color:var(--paper-3)}
+:focus-visible{outline:2px solid var(--clay); outline-offset:2px; border-radius:2px}
+
+/* ---------- layout ---------- */
+.app{display:grid; grid-template-columns:var(--sidebar) 1fr; min-height:100vh}
+
+/* ---------- sidebar / strata ---------- */
+.strata{
+  position:sticky; top:0; align-self:start; height:100vh; overflow:hidden;
+  background:linear-gradient(180deg,#EFE7D4,#E4DAC2);
+  border-right:1px solid var(--line);
+  display:flex; flex-direction:column;
+}
+.brand{padding:22px 22px 16px; border-bottom:1px solid var(--line-soft)}
+.brand-mark{display:flex; align-items:baseline; gap:9px}
+.brand-mark b{
+  font-family:var(--disp); font-weight:800; font-size:21px; letter-spacing:-.02em;
+  color:var(--ink);
+}
+.brand-mark .dot{width:8px;height:8px;border-radius:50%;background:var(--clay);transform:translateY(-2px)}
+.brand-sub{font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); margin-top:7px}
+
+.progress-wrap{padding:14px 22px 10px}
+.progress-line{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px}
+.progress-line .n{font-family:var(--disp); font-weight:700; font-size:14px; color:var(--ink)}
+.progress-line .n em{color:var(--ink-3); font-style:normal; font-weight:500}
+.progress-line .lbl{font-family:var(--mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3)}
+.bar{height:5px; background:#D8CBAD; border-radius:4px; overflow:hidden}
+.bar > i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--moss),var(--clay)); transition:width .5s cubic-bezier(.2,.8,.2,1)}
+
+.searchbox{margin:6px 22px 12px; position:relative}
+.searchbox input{
+  width:100%; padding:9px 12px 9px 30px; font-family:var(--mono); font-size:12px;
+  background:var(--paper-3); border:1px solid var(--line); border-radius:var(--rad); color:var(--ink);
+}
+.searchbox input::placeholder{color:var(--ink-3)}
+.searchbox svg{position:absolute; left:10px; top:50%; transform:translateY(-50%); width:13px; height:13px; stroke:var(--ink-3)}
+
+.layers{flex:1; overflow-y:auto; padding:4px 12px 26px}
+.layers::-webkit-scrollbar{width:9px}
+.layers::-webkit-scrollbar-thumb{background:var(--stone); border-radius:8px; border:2px solid transparent; background-clip:content-box}
+.group-h{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ink-3); padding:16px 10px 7px; display:flex; align-items:center; gap:8px;
+}
+.group-h::after{content:""; flex:1; height:1px; background:var(--line-soft)}
+
+.layer{
+  display:grid; grid-template-columns:30px 1fr auto; align-items:center; gap:10px;
+  width:100%; text-align:left; padding:9px 10px; border-radius:var(--rad);
+  border:1px solid transparent; margin-bottom:1px; color:var(--ink-2);
+  transition:background .14s, border-color .14s, color .14s;
+}
+.layer:hover{background:#EDE4CF}
+.layer .num{
+  font-family:var(--mono); font-size:11px; font-weight:600; color:var(--ink-3);
+  text-align:right; transition:color .14s;
+}
+.layer .ttl{font-family:var(--disp); font-weight:500; font-size:13.5px; line-height:1.25; letter-spacing:-.01em}
+.layer .tick{width:15px; height:15px; border-radius:50%; border:1.5px solid var(--stone); flex:none; position:relative; transition:.16s}
+.layer.done .tick{background:var(--moss); border-color:var(--moss)}
+.layer.done .tick::after{content:""; position:absolute; left:4.5px; top:1.5px; width:4px; height:8px; border:solid var(--paper-3); border-width:0 1.7px 1.7px 0; transform:rotate(43deg)}
+.layer.done .ttl{color:var(--ink-3)}
+.layer.active{background:var(--ink); border-color:var(--ink); color:var(--paper-3)}
+.layer.active .num{color:var(--clay)}
+.layer.active .ttl{color:var(--paper-3)}
+.layer.active .tick{border-color:var(--paper-3)}
+.layer.active.done .tick{background:var(--clay); border-color:var(--clay)}
+.layer.hide{display:none}
+
+.reset-btn{margin:4px 22px 14px; font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); display:inline-flex; align-items:center; gap:6px}
+.reset-btn:hover{color:var(--clay)}
+
+/* ---------- main ---------- */
+.main{min-width:0; position:relative}
+.topbar{display:none}
+.content{max-width:820px; margin:0 auto; padding:54px 56px 120px}
+
+/* overview */
+.hero{margin-bottom:46px}
+.hero .eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--clay); margin-bottom:18px}
+.hero h1{
+  font-family:var(--disp); font-weight:800; font-size:clamp(38px,6vw,62px); line-height:.98;
+  letter-spacing:-.035em; margin:0 0 20px; color:var(--ink);
+}
+.hero h1 span{color:var(--clay)}
+.hero p{font-size:19px; color:var(--ink-2); max-width:60ch; margin:0}
+.hero .meta{display:flex; gap:26px; margin-top:28px; flex-wrap:wrap}
+.hero .meta div{display:flex; flex-direction:column}
+.hero .meta b{font-family:var(--disp); font-weight:700; font-size:26px; color:var(--ink); line-height:1}
+.hero .meta small{font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin-top:6px}
+
+.ov-coreh{font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); margin:40px 0 16px; display:flex; align-items:center; gap:12px}
+.ov-coreh::after{content:""; flex:1; height:1px; background:var(--line)}
+.ov-coreh em{font-style:normal; color:var(--clay)}
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(232px,1fr)); gap:13px}
+.card{
+  text-align:left; background:var(--paper-2); border:1px solid var(--line);
+  border-radius:var(--rad); padding:18px 18px 20px; position:relative; overflow:hidden;
+  transition:transform .16s, box-shadow .16s, border-color .16s; box-shadow:var(--shadow);
+}
+.card::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--clay); opacity:.0; transition:.16s}
+.card[data-core="2"]::before{background:var(--moss)}
+.card:hover{transform:translateY(-3px)}
+.card:hover::before{opacity:1}
+.card .cnum{font-family:var(--mono); font-size:11px; font-weight:600; color:var(--ink-3); display:flex; justify-content:space-between; align-items:center}
+.card .cdot{width:13px;height:13px;border-radius:50%;border:1.5px solid var(--stone)}
+.card.done .cdot{background:var(--moss); border-color:var(--moss); position:relative}
+.card.done .cdot::after{content:"";position:absolute;left:3.6px;top:1px;width:3.5px;height:7px;border:solid var(--paper-3);border-width:0 1.5px 1.5px 0;transform:rotate(43deg)}
+.card h3{font-family:var(--disp); font-weight:600; font-size:18px; line-height:1.16; letter-spacing:-.015em; margin:13px 0 8px; color:var(--ink)}
+.card p{font-size:13.5px; line-height:1.5; color:var(--ink-2); margin:0; font-family:var(--body)}
+
+/* ---------- reader ---------- */
+.r-head{margin-bottom:30px; padding-bottom:26px; border-bottom:2px solid var(--ink)}
+.r-top{display:flex; align-items:center; gap:14px; margin-bottom:20px; flex-wrap:wrap}
+.r-num{font-family:var(--mono); font-size:12px; font-weight:600; color:var(--clay); letter-spacing:.08em}
+.badge{font-family:var(--mono); font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; padding:4px 9px; border-radius:20px; border:1px solid var(--line); color:var(--ink-2)}
+.badge.c1{background:#F0E4D0; border-color:#E0CBA8; color:var(--clay-deep)}
+.badge.c2{background:#E6E9DC; border-color:#CFD6BC; color:var(--moss-deep)}
+.r-head h2{font-family:var(--disp); font-weight:800; font-size:clamp(30px,4.6vw,46px); line-height:1.02; letter-spacing:-.03em; margin:0 0 16px; color:var(--ink)}
+.r-blurb{font-size:18.5px; color:var(--ink-2); max-width:62ch; margin:0 0 22px}
+.markbtn{
+  display:inline-flex; align-items:center; gap:9px; font-family:var(--mono); font-size:11px;
+  letter-spacing:.1em; text-transform:uppercase; padding:9px 16px; border-radius:var(--rad);
+  border:1.5px solid var(--ink); color:var(--ink); transition:.16s;
+}
+.markbtn:hover{background:var(--ink); color:var(--paper-3)}
+.markbtn .box{width:14px;height:14px;border:1.5px solid currentColor;border-radius:3px;position:relative}
+.markbtn.done{background:var(--moss); border-color:var(--moss); color:var(--paper-3)}
+.markbtn.done:hover{background:var(--moss-deep); border-color:var(--moss-deep)}
+.markbtn.done .box{background:var(--paper-3); border-color:var(--paper-3)}
+.markbtn.done .box::after{content:"";position:absolute;left:3.5px;top:.5px;width:4px;height:8px;border:solid var(--moss);border-width:0 1.7px 1.7px 0;transform:rotate(43deg)}
+
+/* sections */
+.section{margin:36px 0}
+.section > .s-h{
+  font-family:var(--mono); font-size:12px; font-weight:600; letter-spacing:.06em; color:var(--clay);
+  padding-bottom:9px; margin:0 0 18px; border-bottom:1px solid var(--line); display:flex; gap:10px; align-items:baseline;
+}
+.sub{font-family:var(--disp); font-weight:600; font-size:18px; letter-spacing:-.01em; color:var(--ink); margin:26px 0 11px}
+.section p{margin:0 0 14px; color:var(--ink)}
+
+ul.bul{list-style:none; margin:0 0 16px; padding:0}
+ul.bul > li{position:relative; padding-left:22px; margin:7px 0; color:var(--ink)}
+ul.bul > li::before{content:""; position:absolute; left:4px; top:.72em; width:6px; height:6px; background:var(--clay); border-radius:1px; transform:rotate(45deg)}
+ul.bul li .lab{font-weight:600}
+ul.bul ul.sub-bul{list-style:none; margin:6px 0 4px; padding:0}
+ul.bul ul.sub-bul > li{position:relative; padding-left:20px; margin:4px 0; color:var(--ink-2); font-size:16px}
+ul.bul ul.sub-bul > li::before{content:""; position:absolute; left:5px; top:.74em; width:6px; height:1.5px; background:var(--stone)}
+
+ol.steps{counter-reset:s; list-style:none; margin:0 0 18px; padding:0}
+ol.steps > li{
+  position:relative; padding:9px 0 9px 46px; border-bottom:1px solid var(--line-soft); color:var(--ink);
+}
+ol.steps > li:last-child{border-bottom:none}
+ol.steps > li::before{
+  counter-increment:s; content:counter(s,decimal-leading-zero);
+  position:absolute; left:0; top:9px; font-family:var(--mono); font-size:12px; font-weight:600;
+  color:var(--clay); width:30px; text-align:right;
+}
+
+/* callouts */
+.note{
+  background:var(--paper-3); border-left:3px solid var(--clay); border-radius:0 var(--rad) var(--rad) 0;
+  padding:15px 18px 15px 20px; margin:18px 0; position:relative;
+}
+.note .nh{font-family:var(--mono); font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--clay); margin-bottom:6px; font-weight:600}
+.note p{margin:0; font-size:16px; line-height:1.56; color:var(--ink-2)}
+.note em{font-style:italic; color:var(--ink)}
+
+.tip{display:flex; gap:13px; padding:13px 17px; margin:16px 0; border-radius:var(--rad); align-items:flex-start}
+.tip.focus{background:#F2E5CF; border:1px solid #E5D2AC}
+.tip.tip-t{background:#E9ECDD; border:1px solid #D3DAC0}
+.tip .tg{font-family:var(--mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; font-weight:600; padding:3px 7px; border-radius:3px; flex:none; margin-top:1px}
+.tip.focus .tg{background:var(--ochre); color:#3b2c08}
+.tip.tip-t .tg{background:var(--moss); color:var(--paper-3)}
+.tip p{margin:0; font-size:15.5px; line-height:1.5; color:var(--ink)}
+
+/* table */
+.tbl-wrap{margin:16px 0; border:1px solid var(--line); border-radius:var(--rad); overflow:hidden}
+table.dt{width:100%; border-collapse:collapse; font-size:15px}
+table.dt th{
+  background:var(--ink); color:var(--paper-3); font-family:var(--mono); font-weight:500;
+  font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; text-align:left; padding:9px 14px;
+}
+table.dt td{padding:9px 14px; border-bottom:1px solid var(--line-soft); color:var(--ink); vertical-align:top}
+table.dt tr:last-child td{border-bottom:none}
+table.dt tr:nth-child(even) td{background:var(--paper-3)}
+table.dt td:first-child{font-weight:600; font-family:var(--disp); white-space:nowrap}
+
+/* code */
+pre.code{
+  font-family:var(--mono); font-size:13px; line-height:1.65; background:var(--ink); color:#EAE0CB;
+  padding:15px 18px; border-radius:var(--rad); overflow-x:auto; margin:16px 0; white-space:pre;
+}
+pre.code .cm{color:#A99C7E}
+
+/* takeaways */
+.takeaways{background:linear-gradient(180deg,#2B2218,#352A1C); color:var(--paper-3); border-radius:var(--rad); padding:28px 30px; margin:42px 0 34px}
+.takeaways h4{font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--ochre); margin:0 0 16px; display:flex; align-items:center; gap:10px}
+.takeaways h4 .pk{font-family:var(--disp); font-weight:800; font-size:13px; color:var(--paper-3)}
+.takeaways ul{list-style:none; margin:0; padding:0; columns:2; column-gap:30px}
+.takeaways li{break-inside:avoid; position:relative; padding:6px 0 6px 22px; font-size:15.5px; color:#E4DAC4; border-bottom:1px solid rgba(247,242,231,.08)}
+.takeaways li::before{content:""; position:absolute; left:3px; top:.95em; width:7px; height:7px; background:var(--clay); border-radius:50%}
+
+/* flashcards */
+.fc-head{font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); margin:38px 0 6px; display:flex; align-items:center; gap:10px}
+.fc-head::after{content:""; flex:1; height:1px; background:var(--line)}
+.fc-sub{font-size:14.5px; color:var(--ink-2); margin:0 0 18px; font-style:italic}
+.fc-grid{display:grid; gap:11px}
+.fc{
+  perspective:1400px; min-height:84px; cursor:pointer; background:none;
+}
+.fc-inner{position:relative; width:100%; min-height:84px; transition:transform .5s cubic-bezier(.2,.85,.3,1); transform-style:preserve-3d; text-align:left}
+.fc.flip .fc-inner{transform:rotateX(180deg)}
+.fc-face{
+  position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden;
+  border-radius:var(--rad); padding:16px 18px; display:flex; align-items:center; gap:14px;
+  border:1px solid var(--line);
+}
+.fc-q{background:var(--paper-2)}
+.fc-a{background:var(--ink); color:var(--paper-3); transform:rotateX(180deg); border-color:var(--ink)}
+.fc-tag{font-family:var(--mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; font-weight:600; padding:4px 7px; border-radius:3px; flex:none; align-self:flex-start; margin-top:2px}
+.fc-q .fc-tag{background:var(--ochre-soft); color:var(--clay-deep)}
+.fc-a .fc-tag{background:var(--clay); color:var(--paper-3)}
+.fc-txt{font-size:15.5px; line-height:1.45}
+.fc-q .fc-txt{color:var(--ink); font-weight:500}
+.fc-a .fc-txt{color:var(--paper-3)}
+
+/* footer nav */
+.r-nav{display:flex; justify-content:space-between; gap:14px; margin-top:46px; padding-top:26px; border-top:1px solid var(--line)}
+.r-nav button{
+  flex:1; text-align:left; padding:15px 18px; border:1px solid var(--line); border-radius:var(--rad);
+  background:var(--paper-2); transition:.16s; box-shadow:var(--shadow);
+}
+.r-nav button:hover:not(:disabled){border-color:var(--ink); transform:translateY(-2px)}
+.r-nav button:disabled{opacity:.32; cursor:default}
+.r-nav button.next{text-align:right}
+.r-nav .dir{font-family:var(--mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3)}
+.r-nav .nm{font-family:var(--disp); font-weight:600; font-size:15px; color:var(--ink); margin-top:5px; line-height:1.2}
+
+/* mobile */
+.scrim{display:none}
+@media (max-width:880px){
+  .app{grid-template-columns:1fr}
+  .strata{position:fixed; top:0; left:0; z-index:60; width:300px; transform:translateX(-100%); transition:transform .28s cubic-bezier(.2,.8,.2,1); box-shadow:0 0 60px -10px rgba(43,34,24,.4)}
+  .app.nav-open .strata{transform:translateX(0)}
+  .scrim{display:block; position:fixed; inset:0; background:rgba(43,34,24,.42); z-index:50; opacity:0; pointer-events:none; transition:opacity .28s}
+  .app.nav-open .scrim{opacity:1; pointer-events:auto}
+  .topbar{
+    display:flex; align-items:center; gap:14px; position:sticky; top:0; z-index:40;
+    background:rgba(231,221,200,.9); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);
+    padding:12px 18px;
+  }
+  .hamb{display:flex; flex-direction:column; gap:4px; padding:5px}
+  .hamb i{width:20px; height:2px; background:var(--ink); border-radius:2px}
+  .topbar b{font-family:var(--disp); font-weight:800; font-size:17px; letter-spacing:-.02em}
+  .topbar .tp-prog{margin-left:auto; font-family:var(--mono); font-size:11px; color:var(--ink-2)}
+  .content{padding:30px 22px 100px}
+  .takeaways ul{columns:1}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .content{padding:24px 17px 90px}
+  .hero .meta{gap:20px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important; animation:none!important; scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="scrim" id="scrim"></div>
+
+  <!-- ============ SIDEBAR / STRATA ============ -->
+  <aside class="strata" id="strata">
+    <div class="brand">
+      <button class="brand-mark" id="homeBtn" title="Overview" style="padding:0">
+        <span class="dot"></span>
+        <b>A+ Strata</b>
+      </button>
+      <div class="brand-sub">CompTIA A+ &middot; Core 1 &amp; 2</div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-line">
+        <span class="n" id="progN">0<em> / 22</em></span>
+        <span class="lbl">Mapped</span>
+      </div>
+      <div class="bar"><i id="progBar"></i></div>
+    </div>
+
+    <div class="searchbox">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+      <input id="search" type="text" placeholder="filter modules\u2026" autocomplete="off" spellcheck="false">
+    </div>
+
+    <nav class="layers" id="layers"></nav>
+
+    <button class="reset-btn" id="resetBtn">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path></svg>
+      Reset progress
+    </button>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+    <div class="topbar">
+      <button class="hamb" id="hamb" aria-label="Menu"><i></i><i></i><i></i></button>
+      <b>A+ Strata</b>
+      <span class="tp-prog" id="tpProg">0/22</span>
+    </div>
+    <div class="content" id="content"></div>
+  </main>
+</div>
+<script>
+/* CompTIA A+ Study Platform — content model
+   Block types used by the renderer:
+   p     : paragraph
+   note  : plain-English clarification ("In plain terms")
+   sub   : subheading inside a section
+   list  : { items:[ string | { l:label, s:[subitems] } ] }
+   steps : ordered list of strings
+   tip   : { k:'focus'|'tip', text }
+   code  : monospace snippet
+   table : { head:[...], rows:[[...]] }
+*/
+const MODULES = [
+/* ============================ MODULE 1 ============================ */
+{
+  id:1, core:1,
+  title:"What IT Specialists Do & Troubleshooting Methodology",
+  short:"IT Role & Troubleshooting",
+  blurb:"The job itself, the soft skills that quietly decide most exam questions, and the 8-step model you must know in order.",
+  sections:[
+    { h:"1.1 The Hero of Problem Solving", blocks:[
+      {t:"sub", text:"Role of an IT Specialist"},
+      {t:"list", items:["Supporting users","Maintaining hardware & software","Troubleshooting issues","Securing systems","Documenting work","Communicating clearly"]},
+      {t:"tip", k:"focus", text:"Know the difference between a technical task and a customer-service responsibility — the exam loves to test that line."},
+      {t:"sub", text:"Skills & Abilities"},
+      {t:"list", items:[
+        {l:"Technical skills", s:["Hardware repair","OS installation","Networking basics","Security fundamentals","Mobile device support"]},
+        {l:"Soft skills", s:["Active listening","Empathy","Professional communication","Patience","Documentation"]}
+      ]},
+      {t:"note", text:"Soft-skill questions appear constantly, especially around customer interactions. CompTIA treats 'how you treat the person' as part of the job, not an extra. When a scenario describes an angry or confused user, the right answer is usually the calm, respectful, listen-first option — not the fastest technical shortcut."}
+    ]},
+    { h:"1.2 The Troubleshooting Methodology", blocks:[
+      {t:"p", text:"This is one of the most important frameworks on the entire A+ exam. You must know the steps in order — questions are written specifically to test sequence."},
+      {t:"sub", text:"The CompTIA 8-step model"},
+      {t:"steps", items:[
+        "Identify the problem",
+        "Establish a theory of probable cause",
+        "Test the theory to determine cause",
+        "Establish a new theory or escalate",
+        "Create a plan of action to resolve",
+        "Implement the solution",
+        "Verify full system functionality (and apply preventive measures)",
+        "Document findings, actions, and outcomes"
+      ]},
+      {t:"sub", text:"Identify the problem"},
+      {t:"list", items:["Ask clarifying questions","Check recent changes","Reproduce the issue","Gather logs and error messages"]},
+      {t:"tip", k:"focus", text:"When a question says \u201cUser reports X,\u201d your first step is always to gather information — never to start replacing parts."},
+      {t:"sub", text:"Establish & test a theory"},
+      {t:"list", items:[
+        {l:"Establish theory", s:["Start with the most likely cause","Combine knowledge with the symptoms in front of you"]},
+        {l:"Test theory", s:["Try a quick, safe test","Confirm or reject the theory"]}
+      ]},
+      {t:"tip", k:"tip", text:"If the theory fails, establish a new one or escalate — do not jump straight to a fix you can\u2019t justify."},
+      {t:"sub", text:"Question the obvious"},
+      {t:"list", items:["Is it plugged in?","Is Wi-Fi turned on?","Is the cable seated?"]},
+      {t:"note", text:"\u201cQuestion the obvious\u201d shows up in trick questions: the scenario buries a simple cause under technical noise. Before anything elaborate, rule out power, cables, and toggles."},
+      {t:"sub", text:"Escalate when"},
+      {t:"list", items:["You lack permissions","You lack the right tools","You lack the expertise","The issue is outside your scope"]},
+      {t:"sub", text:"Plan, verify, document"},
+      {t:"list", items:[
+        {l:"Plan of action", s:["Minimize downtime","Communicate with the user","Back up data if there\u2019s any risk"]},
+        {l:"Verify functionality", s:["Confirm the fix worked","Test related systems too"]},
+        {l:"Document findings", s:["What happened","What you did","The final outcome"]}
+      ]},
+      {t:"tip", k:"tip", text:"Documentation is always the LAST step. If an answer choice documents before verifying, it\u2019s wrong."}
+    ]}
+  ],
+  takeaways:["The 8-step troubleshooting model, in order","Soft skills for IT support","When to escalate","How to identify a problem first","How to verify, then document last"],
+  cards:[
+    {q:"What is step 1 of the CompTIA troubleshooting model?",a:"Identify the problem — gather information, ask questions, check recent changes, and reproduce the issue."},
+    {q:"A user reports their PC \u201cwon\u2019t turn on.\u201d What\u2019s your first move?",a:"Gather information / question the obvious. Confirm it\u2019s plugged in and powered before assuming a hardware failure."},
+    {q:"When do you escalate?",a:"When you lack the permissions, tools, expertise, or the issue falls outside your scope."},
+    {q:"What is always the final step?",a:"Document findings, actions, and outcomes."},
+    {q:"Theory tested and rejected \u2014 now what?",a:"Establish a new theory, or escalate. Don\u2019t implement a fix you haven\u2019t justified."}
+  ]
+},
+/* ============================ MODULE 2 ============================ */
+{
+  id:2, core:1,
+  title:"Cables, Connectors & Motherboards",
+  short:"Cables & Motherboards",
+  blurb:"Every connector you\u2019ll be quizzed on by sight and speed, plus how a motherboard organizes the whole machine.",
+  sections:[
+    { h:"2.1 Cables & Connectors", blocks:[
+      {t:"sub", text:"USB types"},
+      {t:"list", items:[
+        {l:"USB-A", s:["Classic rectangular connector"]},
+        {l:"USB-B", s:["Printers and scanners"]},
+        {l:"USB-C", s:["Reversible; carries power + data + video"]},
+        {l:"Micro-USB", s:["Older mobile devices"]},
+        {l:"Mini-USB", s:["Legacy cameras and GPS units"]}
+      ]},
+      {t:"sub", text:"USB standards (speed)"},
+      {t:"table", head:["Standard","Speed"], rows:[
+        ["USB 2.0","480 Mbps"],
+        ["USB 3.0 / 3.1 Gen 1","5 Gbps (blue port)"],
+        ["USB 3.1 Gen 2","10 Gbps"],
+        ["USB 3.2 / USB4","20\u201340 Gbps, usually over USB-C"]
+      ]},
+      {t:"tip", k:"tip", text:"USB color coding matters: a blue port/connector means USB 3.0."},
+      {t:"sub", text:"Display types & components"},
+      {t:"list", items:["LCD","LED-backlit LCD","OLED","TN / IPS / VA panel variants"]},
+      {t:"list", items:["Backlight","Inverter (older CCFL displays)","LCD panel","Digitizer (touchscreens)"]},
+      {t:"sub", text:"Video interfaces"},
+      {t:"list", items:[
+        {l:"HDMI", s:["Consumer standard; carries audio + video"]},
+        {l:"DisplayPort", s:["PC standard; supports daisy-chaining"]},
+        {l:"Thunderbolt 3/4", s:["Uses the USB-C connector","40 Gbps, power delivery, external GPUs, multiple 4K displays"]},
+        {l:"Lightning", s:["Apple mobile devices before USB-C iPhones"]}
+      ]},
+      {t:"tip", k:"tip", text:"DisplayPort has a locking tab; HDMI does not. Easy identification question."},
+      {t:"sub", text:"Storage & power connectors"},
+      {t:"list", items:[
+        {l:"SATA", s:["Internal storage (HDD / SSD / optical)"]},
+        {l:"eSATA", s:["External SATA devices"]},
+        {l:"Molex", s:["Legacy 4-pin power for fans and older drives \u2014 still tested"]}
+      ]}
+    ]},
+    { h:"2.2 Motherboards", blocks:[
+      {t:"sub", text:"What the board does"},
+      {t:"list", items:["Houses CPU, RAM, and chipset","Provides expansion slots","Distributes power","Connects every component together"]},
+      {t:"sub", text:"ESD & electrical safety"},
+      {t:"list", items:["Use an anti-static wrist strap","Work on a grounded surface","Handle components by their edges"]},
+      {t:"note", text:"ESD (electrostatic discharge) is the silent killer of components. A static jolt too small for you to feel can permanently damage a chip. Grounding yourself equalizes the charge so nothing arcs through the hardware."},
+      {t:"sub", text:"CPU & memory connectors"},
+      {t:"list", items:["CPU sockets: LGA (Intel), PGA (AMD), AM5 (LGA)","RAM slots: DDR3 / DDR4 / DDR5 DIMM slots"]},
+      {t:"sub", text:"Storage connectors"},
+      {t:"list", items:["SATA ports","M.2 slots for NVMe or SATA SSDs","NVMe rides on PCIe lanes for top speed"]},
+      {t:"sub", text:"Expansion slots"},
+      {t:"list", items:[{l:"PCIe (modern)", s:["x1, x4, x8, x16","GPUs, NVMe adapters, NICs"]}, {l:"PCI", s:["Legacy slot"]}]},
+      {t:"sub", text:"Form factors"},
+      {t:"table", head:["Form factor","Use"], rows:[["ATX","Standard full-size"],["Micro-ATX","Smaller"],["Mini-ITX","Compact builds"]]},
+      {t:"tip", k:"tip", text:"Form factor determines case compatibility \u2014 the board must physically fit the case."},
+      {t:"sub", text:"Installation & headers"},
+      {t:"list", items:["Use standoffs to lift the board off the case","Align the I/O shield","Connect 24-pin ATX power and 4/8-pin CPU power"]},
+      {t:"list", items:["USB 2.0 / 3.0 headers","Front-panel header (power / reset / LEDs)","Audio header","Fan headers"]},
+      {t:"sub", text:"Add-in cards"},
+      {t:"list", items:["Video cards \u2014 PCIe x16","Capture cards \u2014 video input","Sound cards \u2014 improved audio","NICs \u2014 wired/wireless network adapters"]}
+    ]},
+    { h:"2.3 Legacy Cables", blocks:[
+      {t:"list", items:[{l:"VGA", s:["Analog only, blue connector"]},{l:"DVI", s:["DVI-D = digital only, DVI-I = digital + analog"]},{l:"Serial (RS-232, DB-9)", s:["Networking gear, POS systems"]}]},
+      {t:"sub", text:"Common adapters"},
+      {t:"list", items:["HDMI \u2192 DVI","USB-C \u2192 HDMI","VGA \u2192 DVI-I","DisplayPort \u2192 HDMI"]}
+    ]}
+  ],
+  takeaways:["USB types & speeds (blue = 3.0)","HDMI vs DisplayPort (locking tab)","SATA vs NVMe","PCIe slot sizes","Motherboard form factors","Legacy connectors & Molex vs SATA power","VGA vs DVI-D vs DVI-I"],
+  cards:[
+    {q:"A blue USB port indicates which standard?",a:"USB 3.0 (3.1 Gen 1) \u2014 5 Gbps."},
+    {q:"How do you tell DisplayPort from HDMI at a glance?",a:"DisplayPort usually has a locking tab; HDMI does not."},
+    {q:"Which is faster: SATA SSD or NVMe?",a:"NVMe \u2014 it uses PCIe lanes instead of the SATA bus."},
+    {q:"DVI-I vs DVI-D?",a:"DVI-I carries both digital and analog; DVI-D is digital only."},
+    {q:"Why use standoffs when installing a motherboard?",a:"They lift the board off the metal case to prevent shorts and align mounting holes."}
+  ]
+},
+/* ============================ MODULE 3 ============================ */
+{
+  id:3, core:1,
+  title:"Installing System Devices",
+  short:"PSUs, Storage, RAM & CPUs",
+  blurb:"Powering, cooling, storing, remembering, and computing \u2014 the four core subsystems and how to install each safely.",
+  sections:[
+    { h:"3.1 Power Supplies & Cooling", blocks:[
+      {t:"sub", text:"Power Supply Units (PSUs)"},
+      {t:"list", items:["Convert AC wall power to the DC components need","Rated in watts \u2014 must exceed total system load","Efficiency ratings: 80 Plus Bronze \u2192 Titanium","Form factors: ATX, SFX, TFX"]},
+      {t:"note", text:"Wattage math: add up every component\u2019s draw, then leave 20\u201330% headroom so the PSU isn\u2019t running at its limit. High-end GPUs alone push you to 600\u2013850W+."},
+      {t:"sub", text:"Power connectors"},
+      {t:"table", head:["Connector","Feeds"], rows:[["24-pin ATX","Motherboard"],["4/8-pin EPS","CPU"],["6/8-pin PCIe","GPU"],["SATA power","SSD/HDD"],["Molex","Legacy devices"]]},
+      {t:"sub", text:"Modular vs redundant"},
+      {t:"list", items:[
+        {l:"Modular", s:["All cables detachable \u2014 best airflow/cable management"]},
+        {l:"Semi-modular", s:["Some cables fixed"]},
+        {l:"Non-modular", s:["All cables fixed"]},
+        {l:"Redundant (servers)", s:["Hot-swappable, prevent downtime"]}
+      ]},
+      {t:"sub", text:"Cooling"},
+      {t:"list", items:[
+        {l:"Fan cooling", s:["Intake = front/bottom, exhaust = rear/top","Positive pressure = less dust; negative pressure = better cooling"]},
+        {l:"Heat sinks & thermal paste", s:["Paste fills microscopic gaps between CPU and cooler","Too much paste actually hurts cooling","Reapply whenever you remove a cooler"]},
+        {l:"Liquid cooling", s:["Better for high-heat CPUs/GPUs","Risks: pump failure, leaks","AIO (sealed) vs custom loops"]}
+      ]}
+    ]},
+    { h:"3.2 Storage Devices", blocks:[
+      {t:"list", items:[
+        {l:"SSD", s:["Fast, silent, shock-resistant","SATA SSD or NVMe (PCIe) \u2014 NVMe is fastest"]},
+        {l:"HDD", s:["Mechanical, slower, larger capacity","5400 / 7200 / 10,000 RPM"]}
+      ]},
+      {t:"sub", text:"RAID levels"},
+      {t:"table", head:["RAID","Technique","Result"], rows:[
+        ["0","Striping","Fastest, NO redundancy"],
+        ["1","Mirroring","Redundant, usable capacity halved"],
+        ["5","Striping + parity","Survives 1 disk failure"],
+        ["6","Double parity","Survives 2 disk failures"],
+        ["10","1 + 0","Fast + redundant, needs 4+ drives"]
+      ]},
+      {t:"note", text:"Parity is a calculated check value spread across the drives. If one disk dies, RAID 5 rebuilds its data from parity on the survivors. RAID 0 has none \u2014 lose any drive and lose everything."},
+      {t:"list", items:["Removable: USB flash, SD/microSD","Optical: CD / DVD / Blu-ray"]}
+    ]},
+    { h:"3.3 System Memory (RAM)", blocks:[
+      {t:"list", items:["RAM = fast and volatile (lost on power-off)","Virtual memory = a pagefile on disk used when RAM runs out","DDR3 / DDR4 / DDR5 are NOT cross-compatible \u2014 different notch positions","DIMM = desktops, SO-DIMM = laptops"]},
+      {t:"sub", text:"Channels & ECC"},
+      {t:"list", items:["Dual/triple-channel needs matching pairs/sets \u2014 boosts bandwidth","ECC RAM error-corrects; used in servers, not consumer boards"]},
+      {t:"sub", text:"Memory troubleshooting"},
+      {t:"list", items:[{l:"Symptoms", s:["Random reboots","BSODs","Failure to POST"]},{l:"Fixes", s:["Reseat RAM","Test one stick at a time","Replace the faulty module"]}]}
+    ]},
+    { h:"3.4 CPUs", blocks:[
+      {t:"list", items:[{l:"Architecture", s:["x86 (32-bit)","x64 (64-bit)","ARM (mobile / low-power)"]}]},
+      {t:"sub", text:"Key features"},
+      {t:"list", items:["Cores & threads","Cache (L1/L2/L3)","Hyper-threading / SMT","Integrated graphics","Virtualization support (Intel VT-x, AMD-V)"]},
+      {t:"sub", text:"Compatibility & install"},
+      {t:"list", items:["Must match socket type, chipset, and BIOS version","Intel = LGA (pins on board), AMD = PGA or AM5 LGA"]},
+      {t:"steps", items:["Lift the retention arm","Align the triangle markers","Place the CPU gently (no force)","Apply thermal paste","Install the cooler"]}
+    ]}
+  ],
+  takeaways:["PSU connectors & wattage headroom","Thermal paste purpose; fan direction","SSD vs HDD; RAID 0/1/5/6/10","DDR generations & dual-channel rules","ECC vs non-ECC","CPU socket compatibility & install order"],
+  cards:[
+    {q:"RAID 5 vs RAID 6 fault tolerance?",a:"RAID 5 survives one drive failure; RAID 6 (double parity) survives two."},
+    {q:"Why leave 20\u201330% wattage headroom on a PSU?",a:"So it isn\u2019t running at its limit, which causes instability and shortens its life."},
+    {q:"What does thermal paste do, and what happens with too much?",a:"It fills microscopic gaps for heat transfer; too much insulates and worsens cooling."},
+    {q:"Three symptoms of failing RAM?",a:"Random reboots, BSODs, and failure to POST."},
+    {q:"Difference between DIMM and SO-DIMM?",a:"DIMM is for desktops; SO-DIMM is the smaller laptop module."}
+  ]
+},
+/* ============================ MODULE 4 ============================ */
+{
+  id:4, core:1,
+  title:"PC Hardware Troubleshooting",
+  short:"Hardware Troubleshooting",
+  blurb:"Diagnosing BIOS/UEFI, power, boot, storage, and display failures \u2014 high-frequency, symptom-driven exam material.",
+  sections:[
+    { h:"4.1 BIOS & UEFI", blocks:[
+      {t:"list", items:[
+        {l:"BIOS vs UEFI", s:["UEFI replaces BIOS: supports GPT, Secure Boot, larger drives, GUI menus"]},
+        {l:"Boot order", s:["Decides which device loads the OS"]},
+        {l:"Secure Boot", s:["Validates bootloaders to ensure OS integrity"]},
+        {l:"BIOS passwords", s:["Supervisor vs user password"]},
+        {l:"TPM", s:["Hardware chip for encryption (BitLocker)"]}
+      ]},
+      {t:"note", text:"TPM (Trusted Platform Module) stores encryption keys in hardware. BitLocker leans on it so a stolen drive can\u2019t be read in another machine. Windows 11 requires TPM 2.0."},
+      {t:"sub", text:"What the exam tests"},
+      {t:"list", items:["When to change boot order","Identifying Secure Boot issues","TPM requirements","Resetting BIOS via CMOS battery or jumper","Symptoms of wrong BIOS settings"]}
+    ]},
+    { h:"4.2 Power, Boot & Disk Issues", blocks:[
+      {t:"sub", text:"Power"},
+      {t:"list", items:["No power \u2192 PSU, cable, or outlet","Intermittent shutdown \u2192 overheating or PSU wattage too low","Burning smell \u2192 STOP immediately"]},
+      {t:"sub", text:"POST"},
+      {t:"list", items:["Beep codes signal hardware faults","No display but fans spin \u2192 GPU or RAM","Continuous reboot \u2192 motherboard or RAM"]},
+      {t:"sub", text:"Boot"},
+      {t:"list", items:["\u201cNo boot device\u201d \u2192 wrong boot order or disconnected drive","Boot loop \u2192 corrupt OS or bad update","Boot sector \u2192 MBR/GPT corruption"]},
+      {t:"sub", text:"Drives & RAID"},
+      {t:"list", items:["Drive not detected \u2192 cable, port, or BIOS setting","SMART warnings \u2192 imminent failure","RAID 0 = any disk fails = total loss; RAID 1/5 survive one disk"]},
+      {t:"note", text:"SMART (Self-Monitoring, Analysis and Reporting Technology) is the drive\u2019s own health report. A SMART warning means back up now \u2014 failure is coming."}
+    ]},
+    { h:"4.3 System & Display Issues", blocks:[
+      {t:"list", items:[
+        {l:"Component faults", s:["RAM \u2192 random reboots/BSOD","CPU \u2192 overheating/throttling","GPU \u2192 artifacts or no display"]},
+        {l:"Overheating causes", s:["Dust buildup","Bad thermal paste","Fan failure","Poor airflow"]},
+        {l:"Physical damage", s:["Bent pins","Cracked PCB","Liquid damage"]},
+        {l:"Date/time resets", s:["Dead CMOS battery"]},
+        {l:"Video", s:["No signal \u2192 cable/GPU/input","Poor quality \u2192 resolution mismatch or drivers","Projector \u2192 keystone, brightness, input source"]}
+      ]},
+      {t:"note", text:"A clock that resets to a default date every boot is the classic dead-CMOS-battery symptom \u2014 and wrong time can break HTTPS certificate validation and domain logins."}
+    ]},
+    { h:"4.4\u20134.8 Labs, Resources & Review", blocks:[
+      {t:"list", items:["Support-ticket and malfunctioning-PC labs reinforce step-by-step troubleshooting","Practice: prioritize issues, document findings, follow the CompTIA model","Build a troubleshooting checklist and learn PSU wattage calculations"]}
+    ]}
+  ],
+  takeaways:["Secure Boot behavior; TPM purpose","POST beep codes & boot-order logic","PSU wattage symptoms","SMART drive warnings","GPU artifact symptoms","Overheating causes; CMOS battery failure signs"],
+  cards:[
+    {q:"Fans spin but there\u2019s no display \u2014 likely culprits?",a:"GPU or RAM."},
+    {q:"PC clock resets to a default date every boot. Cause?",a:"Dead CMOS battery."},
+    {q:"What does a SMART warning tell you to do?",a:"Back up immediately \u2014 the drive is predicting its own failure."},
+    {q:"Windows 11 requires which security chip?",a:"TPM 2.0 (plus Secure Boot)."},
+    {q:"Intermittent shutdowns under load point to what two causes?",a:"Overheating or a PSU with insufficient wattage."}
+  ]
+},
+/* ============================ MODULE 5 ============================ */
+{
+  id:5, core:1,
+  title:"Comparing Local Networking Hardware",
+  short:"Networking Hardware",
+  blurb:"Network types, the devices that move frames, the cabling that carries them, and the Wi-Fi standards on top.",
+  sections:[
+    { h:"5.1 Network Types", blocks:[
+      {t:"list", items:[
+        {l:"LAN", s:["Local, high-speed, one building or campus"]},
+        {l:"WAN", s:["Long-distance, links multiple LANs (e.g. an ISP backbone)"]},
+        {l:"SOHO", s:["Small office/home: router-modem combo, Wi-Fi, minimal segmentation"]},
+        {l:"Enterprise", s:["Managed switches, VLANs, firewalls, access control, redundancy"]},
+        {l:"Datacenter", s:["High-density racks, redundant power, structured cabling"]}
+      ]}
+    ]},
+    { h:"5.2 Networking Hardware", blocks:[
+      {t:"sub", text:"NICs"},
+      {t:"list", items:["Provide wired or wireless connectivity","Wired: RJ-45, 100 Mbps \u2192 10+ Gbps","Wireless must match the AP standard (802.11a/b/g/n/ac/ax)","MAC address = unique 48-bit hardware ID"]},
+      {t:"sub", text:"Switches & panels"},
+      {t:"list", items:[
+        {l:"Switch", s:["Connects LAN devices; uses a MAC address table to forward frames","Operates at Layer 2"]},
+        {l:"Unmanaged vs managed", s:["Unmanaged = plug-and-play","Managed = VLANs, QoS, port mirroring, security"]},
+        {l:"Patch panel", s:["Central termination point; punch-down blocks (T568A/B)"]}
+      ]},
+      {t:"note", text:"Hubs are obsolete \u2014 they blindly repeat every signal to every port. A switch learns which device is on which port (the MAC table) and sends frames only where they need to go."},
+      {t:"list", items:[{l:"PoE", s:["Power + data over one Ethernet cable \u2014 for APs, VoIP phones, cameras"]}]}
+    ]},
+    { h:"5.3 Network Cable Types", blocks:[
+      {t:"list", items:[
+        {l:"UTP", s:["Unshielded twisted pair \u2014 cheapest, most common"]},
+        {l:"STP", s:["Shielded \u2014 reduces EMI in high-interference areas"]}
+      ]},
+      {t:"sub", text:"Category standards"},
+      {t:"table", head:["Cat","Speed"], rows:[["Cat5e","1 Gbps"],["Cat6","1\u201310 Gbps (short runs)"],["Cat6a","10 Gbps, better shielding"]]},
+      {t:"list", items:["Connectors: RJ-45 (Ethernet), RJ-11 (phone), coax F-type (cable internet)","Tools: crimper, punch-down tool, cable tester, tone generator/probe","Fiber: long-distance, immune to EMI; connectors SC, LC, ST"]}
+    ]},
+    { h:"5.4 Wireless Networking", blocks:[
+      {t:"sub", text:"Frequency bands"},
+      {t:"list", items:["2.4 GHz \u2014 longer range, more interference","5 GHz \u2014 faster, shorter range","6 GHz (Wi-Fi 6E/7) \u2014 very fast, low interference"]},
+      {t:"sub", text:"802.11 standards"},
+      {t:"table", head:["Standard","Band / note"], rows:[
+        ["802.11a","5 GHz, 54 Mbps"],
+        ["802.11b/g","2.4 GHz, 11\u201354 Mbps"],
+        ["802.11n","2.4/5 GHz, MIMO"],
+        ["Wi-Fi 5 (ac)","5 GHz, high throughput"],
+        ["Wi-Fi 6 (ax)","2.4/5 GHz, OFDMA"],
+        ["Wi-Fi 7 (be)","2.4/5/6 GHz, extreme throughput"]
+      ]},
+      {t:"list", items:["Wi-Fi analyzers detect channels/interference","Bluetooth, RFID, NFC = short-range communication"]}
+    ]}
+  ],
+  takeaways:["NIC types & speeds","Switch vs hub (hubs are obsolete)","Managed vs unmanaged switches","Cat cable differences; fiber vs copper","Wi-Fi standards & bands","PoE use cases; patch-panel purpose"],
+  cards:[
+    {q:"What does a switch use to forward frames to the right port?",a:"A MAC address table \u2014 it learns which device lives on each port."},
+    {q:"Cat5e vs Cat6a top speed?",a:"Cat5e = 1 Gbps; Cat6a = 10 Gbps with better shielding."},
+    {q:"2.4 GHz vs 5 GHz trade-off?",a:"2.4 GHz = longer range but more interference; 5 GHz = faster but shorter range."},
+    {q:"What three device types commonly run on PoE?",a:"Access points, VoIP phones, and IP cameras."},
+    {q:"Which is immune to EMI \u2014 copper or fiber?",a:"Fiber, because it carries light rather than electrical signals."}
+  ]
+},
+/* ============================ MODULE 6 ============================ */
+{
+  id:6, core:1,
+  title:"Configuring Network Addressing & Internet Connections",
+  short:"Addressing & Internet",
+  blurb:"How devices get connected to the internet and how IP addressing, DHCP, DNS, and common ports actually work.",
+  sections:[
+    { h:"6.1 Internet Connection Types", blocks:[
+      {t:"table", head:["Type","Medium / device"], rows:[
+        ["DSL","Phone lines; slower; DSL modem"],
+        ["Cable","Coaxial; faster; DOCSIS modem"],
+        ["Fiber","Fastest; optical network terminal (ONT)"],
+        ["Fixed wireless","Directional antennas; rural"],
+        ["Cellular","4G/5G hotspots, mobile broadband"]
+      ]},
+      {t:"list", items:["Routers forward traffic between networks; provide NAT, DHCP, firewall, Wi-Fi","Firewalls allow/block traffic by rule \u2014 hardware (router) or software (OS)"]}
+    ]},
+    { h:"6.2 TCP/IP Concepts", blocks:[
+      {t:"sub", text:"TCP/IP model layers"},
+      {t:"list", items:["Link \u2014 NICs, MAC addresses, switches","Internet \u2014 IP addressing, routing","Transport \u2014 TCP/UDP","Application \u2014 HTTP, DNS, DHCP, etc."]},
+      {t:"sub", text:"IPv4 & prefixes"},
+      {t:"list", items:["IPv4 = 32-bit, dotted decimal (192.168.1.10)","CIDR notation (/24) splits network bits from host bits"]},
+      {t:"sub", text:"Public vs private"},
+      {t:"list", items:[{l:"Private ranges", s:["10.0.0.0/8","172.16.0.0/12","192.168.0.0/16"]},{l:"Public", s:["Routable on the internet"]}]},
+      {t:"list", items:["Static = manually assigned (servers)","Dynamic = handed out by DHCP","IPv6 = 128-bit hex, supports SLAAC auto-config, no NAT needed"]},
+      {t:"sub", text:"SOHO router settings"},
+      {t:"list", items:["DHCP on/off","Port forwarding","NAT","Wi-Fi settings","Firewall rules"]}
+    ]},
+    { h:"6.3 Network Communications", blocks:[
+      {t:"sub", text:"Well-known ports"},
+      {t:"table", head:["Port","Service"], rows:[
+        ["20/21","FTP"],["22","SSH"],["23","Telnet"],["25","SMTP"],["53","DNS"],
+        ["67/68","DHCP"],["80","HTTP"],["110","POP3"],["143","IMAP"],["443","HTTPS"]
+      ]},
+      {t:"list", items:["TCP = reliable, connection-oriented","UDP = fast, connectionless","Wireshark captures and analyzes packets for troubleshooting"]}
+    ]},
+    { h:"6.4 Network Configuration Concepts", blocks:[
+      {t:"sub", text:"DHCP \u2014 the DORA process"},
+      {t:"list", items:["Assigns IP, subnet mask, gateway, and DNS servers","DORA: Discover \u2192 Offer \u2192 Request \u2192 Acknowledge"]},
+      {t:"note", text:"DORA is a four-step handshake: the client Discovers any servers, a server Offers an address, the client Requests that specific one, and the server Acknowledges the lease. Memorize the order \u2014 it\u2019s a guaranteed question."},
+      {t:"sub", text:"DNS record types"},
+      {t:"table", head:["Record","Purpose"], rows:[
+        ["A","Maps name \u2192 IPv4"],["AAAA","Maps name \u2192 IPv6"],["CNAME","Alias"],
+        ["MX","Mail server"],["TXT","Verification / SPF"],["PTR","Reverse lookup"]
+      ]},
+      {t:"list", items:["SPF, DKIM, DMARC = email authentication records","VLANs segment networks logically (need managed switches)","VPNs create encrypted tunnels for remote access"]}
+    ]}
+  ],
+  takeaways:["DSL vs Cable vs Fiber","IPv4 addressing & the private ranges","Static vs dynamic addressing","TCP vs UDP & common ports","DHCP DORA process","DNS record types; VLAN & VPN purpose"],
+  cards:[
+    {q:"Spell out the DHCP DORA process.",a:"Discover \u2192 Offer \u2192 Request \u2192 Acknowledge."},
+    {q:"Ports for HTTP, HTTPS, SSH, and DNS?",a:"HTTP 80, HTTPS 443, SSH 22, DNS 53."},
+    {q:"Which DNS record maps a hostname to an IPv4 address?",a:"An A record (AAAA for IPv6)."},
+    {q:"Name the three private IPv4 ranges.",a:"10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16."},
+    {q:"TCP vs UDP in one line each?",a:"TCP = reliable, connection-oriented; UDP = fast, connectionless."}
+  ]
+},
+/* ============================ MODULE 7 ============================ */
+{
+  id:7, core:1,
+  title:"Supporting Network Services",
+  short:"Network Services",
+  blurb:"The server roles behind a business network, the appliances that protect and scale it, and how to troubleshoot connectivity.",
+  sections:[
+    { h:"7.1 Networked Host Services", blocks:[
+      {t:"table", head:["Server role","Does what"], rows:[
+        ["File / print","Stores shared files; manages print queues"],
+        ["Database","Stores structured data (SQL, MySQL, PostgreSQL)"],
+        ["Web","Hosts sites/apps (Apache, Nginx, IIS)"],
+        ["Mail / mailbox","Sends/receives email; stores mailboxes"],
+        ["Directory / auth","Active Directory: accounts, authn, policy"],
+        ["Remote access","SSH or RDP for remote management"],
+        ["Time (NTP)","Synchronizes system clocks"],
+        ["Monitoring","Tracks uptime, bandwidth, alerts"]
+      ]},
+      {t:"list", items:["HTTPS encrypts web traffic with TLS/SSL on port 443","Mail ports: SMTP 25, IMAP 143, POP3 110"]},
+      {t:"note", text:"Why the time server matters: if a machine\u2019s clock drifts, HTTPS certificates look invalid and Kerberos domain logins fail. \u201cWrong time \u2192 cert/login errors\u201d is a favorite exam link."}
+    ]},
+    { h:"7.2 Internet & Embedded Appliances", blocks:[
+      {t:"list", items:[
+        {l:"Proxy server", s:["Filters traffic, caches content, enforces policy"]},
+        {l:"Spam gateway / UTM", s:["UTM bundles firewall, AV, IDS/IPS, and filtering"]},
+        {l:"Load balancer", s:["Distributes traffic across servers for high availability"]},
+        {l:"Legacy systems", s:["Old hardware/software \u2014 often isolated for safety"]},
+        {l:"Embedded / SCADA", s:["Appliances, kiosks; SCADA = industrial control"]},
+        {l:"IoT", s:["Smart home, sensors, cameras (Wi-Fi, Zigbee, Bluetooth)"]}
+      ]},
+      {t:"note", text:"IoT devices are notorious weak spots: default passwords, rare firmware updates, and broad network access. The exam frames them as a security risk to be segmented away from critical systems."}
+    ]},
+    { h:"7.3 Troubleshooting Networks", blocks:[
+      {t:"list", items:[
+        {l:"Wired", s:["Bad cable, wrong port, link light off, speed/duplex mismatch"]},
+        {l:"Speed", s:["Low signal, congestion, duplex mismatch, old cabling"]},
+        {l:"Wireless", s:["Interference, wrong SSID/password, channel overlap, distance"]},
+        {l:"VoIP", s:["Latency, jitter, packet loss, QoS misconfiguration"]},
+        {l:"Limited connectivity", s:["APIPA 169.254.x.x, DHCP failure, gateway unreachable, DNS issues"]}
+      ]},
+      {t:"note", text:"An APIPA address (169.254.x.x) is the giveaway that a device asked for DHCP and got no answer \u2014 it self-assigned. See that range and think \u201cDHCP isn\u2019t reachable.\u201d"}
+    ]}
+  ],
+  takeaways:["Server roles (file, print, web, mail, directory)","Proxy vs firewall vs UTM","Load balancer purpose","IoT security risks","Wired vs wireless troubleshooting; VoIP quality","APIPA meaning; common ports"],
+  cards:[
+    {q:"A PC shows 169.254.12.50 \u2014 what happened?",a:"It\u2019s an APIPA address: the DHCP request got no response, so the device self-assigned."},
+    {q:"Why does wrong system time break logins?",a:"It invalidates HTTPS certificates and Kerberos tickets used for domain authentication."},
+    {q:"What does a UTM appliance combine?",a:"Firewall, antivirus, IDS/IPS, and content filtering in one box."},
+    {q:"What service keeps a website available under heavy traffic?",a:"A load balancer distributing requests across multiple servers."},
+    {q:"VoIP call sounds choppy \u2014 name two likely causes.",a:"Jitter/packet loss or a QoS misconfiguration (latency)."}
+  ]
+},
+/* ============================ MODULE 8 ============================ */
+{
+  id:8, core:1,
+  title:"Virtualization & Cloud Concepts",
+  short:"Virtualization & Cloud",
+  blurb:"Short but high-yield: hypervisor types, why you virtualize, and the cloud service/deployment models you must know cold.",
+  sections:[
+    { h:"8.1 Client-Side Virtualization", blocks:[
+      {t:"sub", text:"Hypervisor types"},
+      {t:"list", items:[
+        {l:"Type 1 (bare-metal)", s:["Runs directly on hardware","Hyper-V, VMware ESXi","Enterprise environments"]},
+        {l:"Type 2 (hosted)", s:["Runs on top of an OS","VirtualBox, VMware Workstation","Labs, testing, training"]}
+      ]},
+      {t:"tip", k:"focus", text:"Know Type 1 vs Type 2. \u201cRuns directly on hardware\u201d = Type 1; \u201cruns inside Windows/macOS\u201d = Type 2."},
+      {t:"sub", text:"Uses for virtualization"},
+      {t:"list", items:["Run multiple OSes on one machine","Test software safely","Isolate risky applications","Build lab environments","Snapshots for instant rollback"]},
+      {t:"sub", text:"Resource & security requirements"},
+      {t:"list", items:["CPU virtualization support (Intel VT-x, AMD-V)","Enough RAM \u2014 each VM gets its own allocation","Disk space for virtual hard disks","GPU resources for graphics-heavy VMs"]},
+      {t:"tip", k:"tip", text:"If a VM runs slowly, it usually needs more RAM or CPU cores allocated."},
+      {t:"list", items:["Isolate VMs from each other","Keep the hypervisor patched","Secure VM network interfaces","Protect VM images \u2014 they\u2019re entire systems in a file"]}
+    ]},
+    { h:"8.2 Cloud Concepts", blocks:[
+      {t:"sub", text:"NIST cloud characteristics"},
+      {t:"list", items:["On-demand self-service","Broad network access","Resource pooling","Rapid elasticity","Measured service (pay-as-you-go)"]},
+      {t:"sub", text:"Deployment models"},
+      {t:"list", items:["Public \u2014 AWS, Azure, Google Cloud","Private \u2014 internal datacenter","Hybrid \u2014 mix of public + private","Community \u2014 shared by similar organizations"]},
+      {t:"sub", text:"Service models"},
+      {t:"table", head:["Model","You manage","Provider manages","Example"], rows:[
+        ["IaaS","OS + apps","Hardware","Azure VM, AWS EC2"],
+        ["PaaS","Apps only","OS + hardware","Azure App Service"],
+        ["SaaS","Nothing","Everything","Office 365, Google Workspace"]
+      ]},
+      {t:"tip", k:"tip", text:"If a question says \u201cno local installation,\u201d the answer is SaaS."},
+      {t:"note", text:"Think of it as pizza: IaaS = you get the kitchen, you cook. PaaS = the oven and dough are ready, you add toppings. SaaS = the pizza is delivered. The further up, the less you manage."},
+      {t:"list", items:["Cloud storage (OneDrive, Drive, Dropbox, iCloud): sync, versioning, sharing, redundancy","CDNs (Cloudflare, Akamai) distribute content globally to cut latency"]}
+    ]}
+  ],
+  takeaways:["Type 1 vs Type 2 hypervisors","VM resource requirements","The 5 NIST cloud characteristics","IaaS vs PaaS vs SaaS","Public vs private vs hybrid cloud","CDN purpose; cloud storage features"],
+  cards:[
+    {q:"Hyper-V and ESXi are which hypervisor type?",a:"Type 1 \u2014 bare-metal, running directly on hardware."},
+    {q:"\u201cNo local installation\u201d points to which cloud model?",a:"SaaS \u2014 the provider manages everything."},
+    {q:"In IaaS, what do YOU manage?",a:"The operating system and your applications; the provider handles the hardware."},
+    {q:"Name two NIST cloud characteristics.",a:"Any two of: on-demand self-service, broad network access, resource pooling, rapid elasticity, measured service."},
+    {q:"What\u2019s the point of a CDN?",a:"It serves content from servers near the user to reduce latency and load on the origin."}
+  ]
+},
+/* ============================ MODULE 9 ============================ */
+{
+  id:9, core:1,
+  title:"Supporting Mobile Devices",
+  short:"Mobile Devices",
+  blurb:"Mobile hardware and connectivity, account/data sync, laptop component replacement, and mobile troubleshooting.",
+  sections:[
+    { h:"9.1 Mobile Devices & Peripherals", blocks:[
+      {t:"list", items:["Accessories: cases, screen protectors, power banks, headsets, docking stations, styluses, keyboards, controllers"]},
+      {t:"sub", text:"Connectivity"},
+      {t:"list", items:[
+        {l:"Wired", s:["USB-C (modern), Lightning (older Apple), Micro-USB (legacy), USB tethering"]},
+        {l:"Docking / port replicators", s:["Add HDMI, DisplayPort, USB, Ethernet, charging"]},
+        {l:"Wi-Fi", s:["SSID selection, WPA2/WPA3, captive portals"]},
+        {l:"Cellular", s:["4G/LTE/5G, SIM cards, APN settings"]},
+        {l:"Hotspot vs tethering", s:["Hotspot shares data over Wi-Fi; tethering shares via USB/Bluetooth/Wi-Fi"]},
+        {l:"Bluetooth / NFC", s:["Bluetooth for peripherals; NFC for tap-to-pay, pairing, access cards"]}
+      ]}
+    ]},
+    { h:"9.2 Mobile Apps & Data", blocks:[
+      {t:"list", items:["App stores: Google Play, Apple App Store \u2014 installation, updates, permissions","Accounts (Apple ID, Google) enable downloads, backups, sync","Sync data: contacts, calendars, photos, app data, email, browser data"]},
+      {t:"sub", text:"Email configuration"},
+      {t:"list", items:["IMAP \u2014 syncs across devices","POP3 \u2014 downloads only","Exchange/ActiveSync \u2014 corporate email"]},
+      {t:"note", text:"IMAP keeps mail on the server so every device sees the same state; POP3 pulls it down to one device and often removes it from the server. For multi-device users, IMAP is almost always the right call."},
+      {t:"list", items:["Sync methods: cloud, USB, local Wi-Fi, enterprise","EMM controls corporate devices: remote wipe, app restrictions, encryption, VPN enforcement","Location services: GPS + Wi-Fi positioning for maps, tracking, geofencing"]}
+    ]},
+    { h:"9.3 Laptop Hardware", blocks:[
+      {t:"list", items:["Disassembly: document, anti-static, track screws, remove cables carefully","Batteries: removable vs sealed; never puncture (fire risk)","RAM uses SO-DIMMs; Wi-Fi cards are M.2 or mini-PCIe","Storage: 2.5\u2033 SATA SSD, M.2 SATA, or M.2 NVMe","Security parts: TPM modules, fingerprint readers, smart-card readers"]}
+    ]},
+    { h:"9.4 Troubleshooting Mobile Devices", blocks:[
+      {t:"list", items:[
+        {l:"Power/battery", s:["Won\u2019t charge, drains fast, overheating, swollen battery (dangerous)"]},
+        {l:"Hardware", s:["Broken buttons, faulty cameras, speaker/mic issues"]},
+        {l:"Screen", s:["Ghost touches, dead zones, cracks, auto-rotate failure"]},
+        {l:"Connectivity", s:["Wi-Fi drops, Bluetooth won\u2019t pair, no signal, APN misconfig"]},
+        {l:"Malware", s:["Pop-ups, battery drain, overheating, unauthorized apps"]}
+      ]},
+      {t:"tip", k:"focus", text:"A swollen battery is a safety hazard \u2014 stop using the device and replace it; do not puncture or charge it."}
+    ]}
+  ],
+  takeaways:["Mobile connection types (Wi-Fi, Bluetooth, NFC, cellular)","Hotspot vs tethering","IMAP vs POP3 vs Exchange","Laptop component replacement","Mobile troubleshooting symptoms","EMM/MDM features"],
+  cards:[
+    {q:"Hotspot vs tethering?",a:"Hotspot shares cellular data as a Wi-Fi network; tethering shares it over USB, Bluetooth, or Wi-Fi to one device."},
+    {q:"User wants the same inbox state on phone and laptop \u2014 IMAP or POP3?",a:"IMAP, because it syncs mail across devices via the server."},
+    {q:"What\u2019s the correct response to a swollen battery?",a:"Stop using the device and replace the battery safely \u2014 never puncture or keep charging it."},
+    {q:"What does NFC enable?",a:"Tap-to-pay, quick device pairing, and access-card functions at very short range."},
+    {q:"Which laptop part lets IT remotely wipe a lost corporate phone?",a:"EMM/MDM enrollment (remote wipe is an EMM feature)."}
+  ]
+},
+/* ============================ MODULE 10 ============================ */
+{
+  id:10, core:1,
+  title:"Supporting Print Devices",
+  short:"Print Devices",
+  blurb:"Printer setup, the laser imaging process you\u2019ll be tested on every time, maintenance by printer type, and quality troubleshooting.",
+  sections:[
+    { h:"10.1 Printers & Multifunction Devices", blocks:[
+      {t:"list", items:["Setup needs a stable surface, ventilation, power/network access, no dust or humidity","Firmware updates fix bugs and patch security \u2014 never interrupt them","Connectivity: USB, Ethernet, Wi-Fi, Bluetooth, cloud printing"]},
+      {t:"sub", text:"Page description languages"},
+      {t:"table", head:["PDL","Strength"], rows:[["PCL","Fast, common"],["PostScript","Graphics-heavy jobs"],["GDI","Windows-based, uses the PC\u2019s resources"]]},
+      {t:"sub", text:"Printer security"},
+      {t:"list", items:["Secure print release","User authentication","Firmware updates","Disable unused ports","Wipe the hard drive on disposal"]},
+      {t:"list", items:["Scanner settings: DPI, file format (PDF/JPEG/TIFF), duplex, OCR"]}
+    ]},
+    { h:"10.2 Print Device Maintenance", blocks:[
+      {t:"sub", text:"Laser imaging process (always tested)"},
+      {t:"steps", items:["Processing","Charging","Exposing","Developing","Transferring","Fusing","Cleaning"]},
+      {t:"note", text:"A way to remember it: the drum is Charged, the laser Exposes an image, toner Develops onto it, it Transfers to paper, heat Fuses it permanently, then the drum is Cleaned for the next page (Processing comes first, as the printer prepares the job)."},
+      {t:"table", head:["Printer","Maintenance"], rows:[
+        ["Laser","Replace toner/fuser, clean rollers, use maintenance kits"],
+        ["Inkjet","Clean print heads, replace cartridges, run alignment"],
+        ["Thermal","Clean print head, replace thermal paper, remove residue"],
+        ["Impact","Replace ribbon, clean print head, replace tractor-feed paper"]
+      ]}
+    ]},
+    { h:"10.3 Troubleshooting Print Devices", blocks:[
+      {t:"list", items:[
+        {l:"Connectivity", s:["Offline, wrong port, driver mismatch, network issue"]},
+        {l:"Feed", s:["Multiple sheets, no feed, dirty rollers"]},
+        {l:"Quality", s:["Streaks, smudges, fading, ghosting, misalignment"]},
+        {l:"Job", s:["Stuck queue, corrupt job, wrong printer \u2014 restart the spooler"]}
+      ]},
+      {t:"tip", k:"tip", text:"Quality clues: laser streaks \u2192 toner; inkjet streaks \u2192 clogged nozzles; ghosting \u2192 fuser."}
+    ]}
+  ],
+  takeaways:["Laser imaging process (7 steps)","PCL vs PostScript vs GDI","Printer connectivity types","Print-quality clues by printer type","Thermal vs inkjet vs laser maintenance","Print spooler troubleshooting"],
+  cards:[
+    {q:"List the laser imaging steps in order.",a:"Processing, Charging, Exposing, Developing, Transferring, Fusing, Cleaning."},
+    {q:"Repeated ghost images on laser prints \u2014 which component?",a:"The fuser."},
+    {q:"Inkjet streaks usually mean what?",a:"Clogged print-head nozzles \u2014 run a head-cleaning cycle."},
+    {q:"Print jobs are stuck and nothing prints \u2014 first fix?",a:"Restart the print spooler service and clear the queue."},
+    {q:"Which PDL is best for graphics-heavy jobs?",a:"PostScript."}
+  ]
+},
+/* ============================ MODULE 11 ============================ */
+{
+  id:11, core:2,
+  title:"Managing Support Procedures",
+  short:"Support Procedures",
+  blurb:"The administrative backbone of IT support \u2014 SOPs, SLAs, ticketing, professional communication, and OS types.",
+  sections:[
+    { h:"11.1 Documentation", blocks:[
+      {t:"list", items:[
+        {l:"SOPs", s:["Step-by-step instructions for recurring tasks \u2014 follow before improvising"]},
+        {l:"SLAs", s:["Define response/resolution times, scope, and availability \u2014 they set ticket priority"]},
+        {l:"Ticketing", s:["Tracks issue, user, severity, status, assigned tech"]}
+      ]},
+      {t:"list", items:["Severity example: Sev 1 = outage, Sev 4 = minor issue","Escalation path: Tier 1 \u2192 Tier 2 \u2192 Tier 3 \u2192 Vendor","Knowledge base stores solutions, FAQs, procedures","Lessons learned reviewed after major incidents"]},
+      {t:"note", text:"SOP vs SLA is a classic mix-up. SOP = HOW you do a task (internal procedure). SLA = the PROMISE to the customer about how fast and how reliably. The SLA decides which ticket you grab first."}
+    ]},
+    { h:"11.2 Professional Communication", blocks:[
+      {t:"list", items:["Process: greet, verify identity, gather info, follow steps","Delivery: patience, empathy, active listening, clear explanations","Appearance: dress for the workplace; keep a clean workspace","Avoid slang and blame; use positive language; confirm understanding","Ask open-ended questions; repeat back to confirm"]},
+      {t:"sub", text:"Difficult customers"},
+      {t:"list", items:["Stay calm","Don\u2019t take it personally","Focus on solutions","Escalate if abusive"]},
+      {t:"tip", k:"focus", text:"Never post customer info or internal issues on social media \u2014 confidentiality is absolute."}
+    ]},
+    { h:"11.3 Types of Operating Systems", blocks:[
+      {t:"table", head:["OS","File systems / notes"], rows:[
+        ["Windows","NTFS, FAT32, ReFS"],
+        ["macOS","APFS, HFS+"],
+        ["Linux","ext4, XFS, Btrfs"],
+        ["ChromeOS","Cloud-centric, sandboxed apps"],
+        ["iOS / Android","App stores, sandboxing, permissions"]
+      ]},
+      {t:"list", items:["Compatibility: 32-bit vs 64-bit, driver support, app requirements","Life cycle: end of support vs end of life vs patch availability"]},
+      {t:"tip", k:"tip", text:"An unsupported (end-of-life) OS is a security risk \u2014 no more patches means known holes stay open."}
+    ]}
+  ],
+  takeaways:["SOPs vs SLAs","Ticket severity levels","Escalation procedures","Professional communication skills","OS file systems","Vendor support life cycles"],
+  cards:[
+    {q:"What\u2019s the difference between an SOP and an SLA?",a:"An SOP is the internal step-by-step procedure; an SLA is the customer-facing promise about response/resolution times that sets ticket priority."},
+    {q:"Default file system for modern macOS?",a:"APFS (Apple File System)."},
+    {q:"A customer is verbally abusive \u2014 what do you do?",a:"Stay calm and professional, focus on the solution, and escalate if the abuse continues."},
+    {q:"Why is an end-of-life OS a security risk?",a:"It no longer receives patches, so known vulnerabilities remain exploitable."},
+    {q:"What does the escalation path look like?",a:"Tier 1 \u2192 Tier 2 \u2192 Tier 3 \u2192 Vendor."}
+  ]
+},
+/* ============================ MODULE 12 ============================ */
+{
+  id:12, core:2,
+  title:"Configuring Windows",
+  short:"Configuring Windows",
+  blurb:"User-facing settings, the system-level configuration that\u2019s heavily tested, installing applications, and cloud apps.",
+  sections:[
+    { h:"12.1 Windows User Settings", blocks:[
+      {t:"list", items:["Interface: Start menu, taskbar, Action Center, Quick Settings, notification area"]},
+      {t:"sub", text:"Settings app vs Control Panel"},
+      {t:"list", items:[{l:"Settings app", s:["Modern configuration"]},{l:"Control Panel (legacy)", s:["Still used for Device Manager, Programs & Features, Power Options, some network settings"]}]},
+      {t:"list", items:[
+        {l:"Account types", s:["Local vs Microsoft account","Administrator vs Standard"]},
+        {l:"Privacy", s:["Location, camera/mic access, app permissions, diagnostics"]},
+        {l:"Personalization", s:["Themes, background, lock screen, screen saver password"]},
+        {l:"Ease of Access", s:["Magnifier, Narrator, high contrast, Sticky Keys"]},
+        {l:"File Explorer / Folder Options", s:["Show hidden files, show extensions, indexing"]}
+      ]}
+    ]},
+    { h:"12.2 Windows System Settings", blocks:[
+      {t:"list", items:[
+        {l:"System", s:["About, device info, system protection, Remote Desktop"]},
+        {l:"Update & Security", s:["Update channels, active hours, optional updates; Defender, firewall, device security"]},
+        {l:"Device Manager", s:["Driver updates, hardware troubleshooting, device properties"]},
+        {l:"Display & Sound", s:["Resolution, scaling, multiple monitors; input/output, volume mixer"]},
+        {l:"Power Options", s:["Balanced / High performance, sleep/hibernate, lid actions"]},
+        {l:"Network & Internet", s:["Wi-Fi, Ethernet, VPN, proxy, network reset"]}
+      ]},
+      {t:"sub", text:"Administrative tools & shortcuts"},
+      {t:"list", items:["Event Viewer, Task Scheduler, Services, Disk Management, Performance Monitor","Quick access: Win+X menu, Run dialog, Task Manager"]}
+    ]},
+    { h:"12.3 Install & Configure Applications", blocks:[
+      {t:"list", items:["System requirements: CPU, RAM, disk, GPU, OS version","OS compatibility: 32-bit vs 64-bit, Windows version, frameworks like .NET","Distribution: Microsoft Store, .exe, .msi, enterprise deployment tools","Also consider licensing, permissions, updates, storage location"]},
+      {t:"note", text:".exe is a general installer/program; .msi is a Windows Installer package that supports clean, scriptable install/uninstall \u2014 which is why enterprises prefer it for mass deployment."}
+    ]},
+    { h:"12.4 Cloud-Based Applications", blocks:[
+      {t:"list", items:["Email: Outlook.com, Gmail, Exchange Online","Storage: OneDrive, Google Drive, Dropbox","Collaboration: Teams, Slack, SharePoint, Google Workspace","Licensing: per-user, per-device, subscription","Identity sync: Azure AD Connect, SSO, federation"]}
+    ]}
+  ],
+  takeaways:["Windows Settings vs Control Panel","Account types","Power plan configuration","Device Manager usage","Windows Update behavior","Cloud app licensing; .exe vs .msi"],
+  cards:[
+    {q:"Where do you still go for Device Manager and Programs & Features?",a:"Control Panel (the legacy interface), though some links now appear in Settings too."},
+    {q:"Why do enterprises favor .msi over .exe?",a:".msi packages support clean, scriptable, repeatable install/uninstall for mass deployment."},
+    {q:"Standard vs Administrator account \u2014 which for daily use?",a:"Standard, to limit damage and malware; elevate to Administrator only when needed."},
+    {q:"What does \u2018active hours\u2019 control in Windows Update?",a:"The window during which Windows won\u2019t automatically restart to apply updates."},
+    {q:"Tool for driver updates and hardware status with the yellow ! icon?",a:"Device Manager."}
+  ]
+},
+/* ============================ MODULE 13 ============================ */
+{
+  id:13, core:2,
+  title:"Managing Windows",
+  short:"Managing Windows",
+  blurb:"Management consoles, the command-line tools you must recognize, and Windows networking configuration.",
+  sections:[
+    { h:"13.1 Management Consoles", blocks:[
+      {t:"table", head:["Console","Purpose"], rows:[
+        ["Device Manager","Drivers & hardware (yellow ! = driver issue)"],
+        ["Disk Management","Partition, format, assign letters, shrink/extend"],
+        ["Disk tools","chkdsk, defrag, diskpart, Storage Sense"],
+        ["Task Scheduler","Automate updates, scripts, maintenance"],
+        ["Local Users & Groups","Accounts, group membership (not in Home)"],
+        ["Certificate Manager","HTTPS, email encryption, auth certificates"],
+        ["Group Policy (gpedit.msc)","System-wide policies (not in Home)"],
+        ["Registry Editor","Low-level OS settings \u2014 dangerous if misused"],
+        ["MMC","Build custom dashboards from snap-ins"]
+      ]},
+      {t:"tip", k:"tip", text:"Local Users & Groups and Group Policy (gpedit.msc) are NOT available in Windows Home edition."}
+    ]},
+    { h:"13.2 Command-Line Tools", blocks:[
+      {t:"sub", text:"Navigation & files"},
+      {t:"code", text:"cd  dir  cls          \u2014 navigate\ncopy  xcopy  robocopy  \u2014 copy (robocopy is most powerful)\ndel  move"},
+      {t:"sub", text:"Disk & system"},
+      {t:"code", text:"diskpart  chkdsk  format\nsfc /scannow  dism      \u2014 repair system files\nipconfig  ping  netstat\ntasklist  taskkill  shutdown"},
+      {t:"note", text:"sfc /scannow scans and repairs protected Windows system files; DISM repairs the underlying component store image that sfc draws from. Run DISM first, then sfc, when system files are corrupt."}
+    ]},
+    { h:"13.3 Windows Networking", blocks:[
+      {t:"list", items:["Connection types: Ethernet, Wi-Fi, VPN, WWAN (cellular)","IP addressing: static vs DHCP, IPv4/IPv6, subnet, gateway, DNS","Network profiles: Public vs Private affect discovery, sharing, firewall"]},
+      {t:"sub", text:"Firewall & VPN"},
+      {t:"list", items:["Defender Firewall: allow/block apps, inbound/outbound rules, profiles (Domain/Private/Public)","VPN protocols: L2TP, PPTP, SSTP, IKEv2","Proxy: automatic (PAC file), manual, bypass list"]}
+    ]}
+  ],
+  takeaways:["Device Manager icons","Disk Management tasks","Key Windows commands","Firewall profiles","VPN protocols; proxy vs VPN","Group Policy vs Registry"],
+  cards:[
+    {q:"Which two consoles are missing from Windows Home?",a:"Local Users & Groups and Group Policy Editor (gpedit.msc)."},
+    {q:"Order to repair corrupt system files?",a:"DISM first to fix the component store, then sfc /scannow."},
+    {q:"Most powerful Windows file-copy command?",a:"robocopy (robust copy)."},
+    {q:"A yellow exclamation mark in Device Manager means what?",a:"A driver problem with that device."},
+    {q:"Which network profile is most restrictive by default?",a:"Public \u2014 it disables discovery/sharing and tightens the firewall."}
+  ]
+},
+/* ============================ MODULE 14 ============================ */
+{
+  id:14, core:2,
+  title:"Supporting Windows",
+  short:"Supporting Windows",
+  blurb:"Diagnosing Windows networking, remote access tools, performance utilities, and the boot/recovery toolkit.",
+  sections:[
+    { h:"14.1 Troubleshoot Windows Networking", blocks:[
+      {t:"table", head:["Symptom","Tool / fix"], rows:[
+        ["169.254.x.x (APIPA)","DHCP failure \u2014 ipconfig /release & /renew"],
+        ["Wrong DNS / can ping IP not name","nslookup, ipconfig /flushdns"],
+        ["Gateway/ISP unreachable","tracert, pathping, netstat"],
+        ["Local link issues","ping, check link lights, NIC enabled"],
+        ["Blocked ports / odd listeners","netstat -an"]
+      ]},
+      {t:"code", text:"ipconfig /all      ipconfig /release\nipconfig /renew    ipconfig /flushdns"}
+    ]},
+    { h:"14.2 Remote Access Technologies", blocks:[
+      {t:"table", head:["Tool","Notes"], rows:[
+        ["Remote Desktop (RDP)","Full control, port 3389, enable + firewall rule"],
+        ["RDP security","Network Level Authentication, restrict users"],
+        ["Remote Assistance","User grants permission to view/control"],
+        ["WinRM","Remote PowerShell for automation"],
+        ["SSH","Secure CLI; OpenSSH built into Windows 10+"],
+        ["SPICE","Remote display protocol for virtualized environments"]
+      ]},
+      {t:"note", text:"RDP gives you the machine; Remote Assistance asks the seated user for permission and lets you both watch the same screen \u2014 use it for guiding a user, not silently taking over."}
+    ]},
+    { h:"14.3 Performance & Troubleshooting Tools", blocks:[
+      {t:"list", items:[
+        {l:"System Information", s:["Hardware, drivers, summary"]},
+        {l:"Event Viewer", s:["System errors, app crashes, security events"]},
+        {l:"Task Manager", s:["Processes, Performance, Users, Startup, App history"]},
+        {l:"Resource vs Performance Monitor", s:["Resource = real-time; Performance = long-term counters"]},
+        {l:"msconfig", s:["Safe boot, disable startup services, boot troubleshooting"]}
+      ]}
+    ]},
+    { h:"14.4 Troubleshoot Windows OS Problems", blocks:[
+      {t:"sub", text:"Boot process"},
+      {t:"list", items:["UEFI/BIOS \u2192 Boot manager \u2192 OS loader \u2192 Kernel init"]},
+      {t:"sub", text:"Recovery (Windows RE)"},
+      {t:"list", items:["Startup Repair, System Restore, Command Prompt, System Image Recovery, Safe Mode"]},
+      {t:"list", items:["System Restore rolls back system files & registry \u2014 NOT personal files","Repair options: Reset this PC, in-place upgrade, clean install, enterprise reimage"]},
+      {t:"sub", text:"Boot repair commands"},
+      {t:"code", text:"bootrec /fixmbr\nbootrec /fixboot\nbootrec /rebuildbcd"},
+      {t:"list", items:["Profile issues: temporary profile, missing icons, corrupt NTUSER.DAT","Performance: too many startup apps, malware, memory leaks, disk thrashing"]}
+    ]}
+  ],
+  takeaways:["ipconfig / ping / tracert / nslookup","Windows RE recovery tools","Driver rollback vs System Restore","Task Manager tabs","RDP vs Remote Assistance vs SSH","bootrec repair commands"],
+  cards:[
+    {q:"Command to clear a stale DNS cache?",a:"ipconfig /flushdns."},
+    {q:"You can ping by IP but not by name \u2014 what\u2019s broken?",a:"Name resolution (DNS). Try nslookup and flush the DNS cache."},
+    {q:"Does System Restore delete personal files?",a:"No \u2014 it rolls back system files and the registry, leaving personal files alone."},
+    {q:"Which RDP port and feature should you enable for security?",a:"Port 3389 with Network Level Authentication (NLA)."},
+    {q:"Three commands to repair a broken Windows boot?",a:"bootrec /fixmbr, /fixboot, and /rebuildbcd."}
+  ]
+},
+/* ============================ MODULE 15 ============================ */
+{
+  id:15, core:2,
+  title:"Securing Windows",
+  short:"Securing Windows",
+  blurb:"Logical security controls, the CIA triad and encryption basics, authentication, Active Directory, and the NTFS-vs-share rule.",
+  sections:[
+    { h:"15.1 Logical Security Concepts", blocks:[
+      {t:"list", items:["Logical controls (software): password & lockout policies, NTFS/share permissions, firewalls, encryption (BitLocker, EFS), MFA, least privilege"]},
+      {t:"tip", k:"focus", text:"Logical controls protect data and access \u2014 not the physical device. Locks and guards are physical controls."},
+      {t:"sub", text:"CIA triad"},
+      {t:"table", head:["Goal","Achieved by"], rows:[
+        ["Confidentiality","Encryption, permissions"],
+        ["Integrity","Hashing, digital signatures"],
+        ["Availability","Backups, redundancy"]
+      ]},
+      {t:"sub", text:"Hashing vs encryption"},
+      {t:"list", items:["Hashing = one-way; verifies integrity","Symmetric = one shared key","Asymmetric = public/private key pair (public encrypts, private decrypts)"]},
+      {t:"note", text:"Digital signatures flip asymmetric encryption: the sender signs with their PRIVATE key, anyone verifies with the PUBLIC key \u2014 proving who sent it and that it wasn\u2019t altered."},
+      {t:"sub", text:"Accounts & UAC"},
+      {t:"list", items:["Local vs domain accounts; groups simplify permissions; Admin vs Standard","UAC requires elevation for system changes \u2014 a UAC prompt = privilege escalation","Auth methods: password, PIN, biometrics (Windows Hello), smart cards, MFA, certificates"]}
+    ]},
+    { h:"15.2 Windows Security Settings", blocks:[
+      {t:"list", items:["Login options: password, PIN, picture password, biometrics, security keys"]},
+      {t:"sub", text:"Domains & Active Directory"},
+      {t:"list", items:["Centralized auth, Group Policy, Organizational Units, domain controllers"]},
+      {t:"tip", k:"focus", text:"Workgroup = peer-to-peer (each PC manages its own accounts). Domain = centralized enterprise management via a domain controller."},
+      {t:"list", items:["Group Policy controls security settings, software restrictions, drive mappings, login scripts","Policy docs: password, acceptable use, remote access, data handling"]}
+    ]},
+    { h:"15.3 Windows Shares", blocks:[
+      {t:"list", items:["Workgroup: no central auth, local accounts only","File shares: set share permissions AND NTFS permissions"]},
+      {t:"sub", text:"NTFS vs share permissions (critical)"},
+      {t:"list", items:["NTFS applies locally AND over the network","Share applies only over the network","When they conflict, the MOST RESTRICTIVE permission wins"]},
+      {t:"note", text:"Walk it through: if Share says Full Control but NTFS says Read, a network user gets Read. The effective permission is the most restrictive of the two combined."},
+      {t:"list", items:["Permissions inherit from parent folders (can be blocked)","Roaming profiles follow the user to any domain PC","Folder redirection stores Documents/Desktop on a server"]}
+    ]}
+  ],
+  takeaways:["Hashing vs encryption","Symmetric vs asymmetric encryption","UAC purpose","NTFS vs share permissions (most restrictive wins)","Group Policy functions","Active Directory vs Workgroup; roaming profiles vs folder redirection"],
+  cards:[
+    {q:"Share = Full Control, NTFS = Read. What does a network user get?",a:"Read \u2014 the most restrictive of the combined permissions wins."},
+    {q:"Map the CIA triad to its mechanisms.",a:"Confidentiality = encryption/permissions, Integrity = hashing/signatures, Availability = backups/redundancy."},
+    {q:"Is hashing reversible?",a:"No \u2014 it\u2019s one-way and used to verify integrity, not to recover the original data."},
+    {q:"Workgroup vs domain in one line?",a:"Workgroup = peer-to-peer, each PC self-manages; domain = centralized auth/policy via a domain controller."},
+    {q:"In a digital signature, which key signs and which verifies?",a:"The private key signs; the public key verifies."}
+  ]
+},
+/* ============================ MODULE 16 ============================ */
+{
+  id:16, core:2,
+  title:"Installing Operating Systems",
+  short:"Installing OSes",
+  blurb:"Which Windows edition fits which job, the upgrade paths, installation methods, and disk configuration (MBR vs GPT).",
+  sections:[
+    { h:"16.1 Windows Editions", blocks:[
+      {t:"list", items:["Versions: Windows 7 (legacy), 8/8.1, 10, 11"]},
+      {t:"tip", k:"focus", text:"Windows 11 requires TPM 2.0, Secure Boot, and a supported CPU generation."},
+      {t:"sub", text:"Edition feature ladder"},
+      {t:"table", head:["Edition","Gains"], rows:[
+        ["Home","Missing BitLocker, Group Policy, domain join, Hyper-V, RDP host"],
+        ["Pro","Adds BitLocker, Hyper-V, RDP host, domain join"],
+        ["Enterprise","Adds AppLocker, DirectAccess, Windows To Go, advanced security"],
+        ["Education / Pro for Workstations","Assigned Access, Update for Business, enterprise security"]
+      ]},
+      {t:"sub", text:"Upgrade paths"},
+      {t:"list", items:["Home \u2192 Pro (allowed)","Pro \u2192 Enterprise (allowed)","Home \u2192 Enterprise (NOT directly)","32-bit \u2192 64-bit requires a clean reinstall","Feature updates = twice-yearly major updates"]}
+    ]},
+    { h:"16.2 OS Installations & Upgrades", blocks:[
+      {t:"sub", text:"Before you install"},
+      {t:"list", items:["Check hardware requirements","Back up data","Verify app compatibility","Confirm licensing","Choose 32-bit vs 64-bit"]},
+      {t:"sub", text:"Installation methods"},
+      {t:"list", items:["Unattended installs use XML answer files (often via WDS)","Boot media: USB, DVD, network PXE boot, VM ISO"]},
+      {t:"tip", k:"tip", text:"UEFI systems require FAT32-formatted boot media."},
+      {t:"sub", text:"Disk configuration"},
+      {t:"list", items:["MBR vs GPT (GPT supports >2TB and many partitions; pairs with UEFI)","Partitions vs volumes","Formatting: NTFS, FAT32, exFAT","BitLocker drive encryption; basic vs dynamic disks"]},
+      {t:"note", text:"MBR caps out at 2 TB and 4 primary partitions and pairs with legacy BIOS. GPT removes those limits and is required for UEFI/Secure Boot \u2014 so modern installs use GPT."},
+      {t:"sub", text:"Repair options"},
+      {t:"list", items:["In-place upgrade repair","Startup Repair","Reset this PC","System Image Recovery"]}
+    ]}
+  ],
+  takeaways:["Windows edition differences","Upgrade paths","Installation methods","MBR vs GPT","File system types","Repair vs reinstall vs reimage; UEFI vs BIOS boot"],
+  cards:[
+    {q:"Which features does Windows Home lack?",a:"BitLocker, Group Policy, domain join, Hyper-V, and the Remote Desktop host."},
+    {q:"Can you upgrade Home directly to Enterprise?",a:"No \u2014 go Home \u2192 Pro \u2192 Enterprise."},
+    {q:"Why use GPT over MBR on a new build?",a:"GPT supports drives over 2 TB and many partitions and is required for UEFI/Secure Boot."},
+    {q:"UEFI boot media must be formatted as what?",a:"FAT32."},
+    {q:"What does Windows 11 require that 10 didn\u2019t?",a:"TPM 2.0, Secure Boot, and a supported CPU generation."}
+  ]
+},
+/* ============================ MODULE 17 ============================ */
+{
+  id:17, core:2,
+  title:"Supporting Other Operating Systems",
+  short:"Linux & macOS",
+  blurb:"Linux commands and permissions, package and process management, and the macOS tools the exam expects you to recognize.",
+  sections:[
+    { h:"17.1 Linux Features", blocks:[
+      {t:"list", items:["Shell = command interpreter (bash, zsh, sh); terminal opens a shell; console is the text interface","Command pattern: command [options] [arguments]"]},
+      {t:"sub", text:"Navigation, search, files"},
+      {t:"code", text:"pwd  cd  ls            \u2014 navigate\ngrep  find  locate     \u2014 search\ncp  mv  rm  touch  mkdir  \u2014 files\ndf  du  mount  umount  \u2014 filesystem"},
+      {t:"sub", text:"Users & permissions"},
+      {t:"list", items:["useradd, passwd, usermod, groupadd; accounts in /etc/passwd & /etc/shadow","Permissions: Owner / Group / Other \u00d7 r (read), w (write), x (execute)","chmod, chown, chgrp"]},
+      {t:"code", text:"chmod 755 file.sh   \u2014 rwx for owner, r-x for group/other"},
+      {t:"note", text:"Numeric permissions add up: r=4, w=2, x=1. So 7 = rwx, 5 = r-x. \u2018755\u2019 means the owner can do everything and everyone else can read and execute."}
+    ]},
+    { h:"17.2 Package & Network Management", blocks:[
+      {t:"table", head:["Distro family","Package tools"], rows:[["Debian/Ubuntu","apt, dpkg"],["Red Hat/CentOS","yum, dnf, rpm"]]},
+      {t:"code", text:"ps  top  htop  kill  systemctl   \u2014 processes/services\nifconfig  ip addr  ping  netstat  ss  nmcli  \u2014 network\ntar  rsync  cron  crontab -e      \u2014 backup/schedule"}
+    ]},
+    { h:"17.3 macOS Features", blocks:[
+      {t:"list", items:["Interface: Finder, Dock, Mission Control, Spotlight","Folders: /Applications, /Library, /Users, /System"]},
+      {t:"sub", text:"Security & backup"},
+      {t:"table", head:["Tool","Role"], rows:[
+        ["FileVault","Full-disk encryption"],
+        ["Gatekeeper","Blocks untrusted apps"],
+        ["Keychain Access","Password manager"],
+        ["Time Machine","Automatic versioned backups"]
+      ]},
+      {t:"list", items:["iCloud/Continuity: Handoff, Universal Clipboard, iCloud Drive, Messages sync","Install apps: App Store, .pkg installers, .dmg disk images","Recovery: Safe Mode, Disk Utility, Recovery Mode, Activity Monitor"]}
+    ]}
+  ],
+  takeaways:["Linux navigation & file commands","Linux permissions (chmod, chown)","Linux package managers (apt vs yum/dnf)","macOS security tools (FileVault, Gatekeeper, Keychain)","Time Machine","macOS vs Linux vs Windows differences"],
+  cards:[
+    {q:"What does chmod 755 grant?",a:"Owner rwx (7); group and others r-x (5) \u2014 read and execute but not write."},
+    {q:"Package managers for Ubuntu vs CentOS?",a:"Ubuntu uses apt/dpkg; CentOS/Red Hat uses yum/dnf/rpm."},
+    {q:"macOS full-disk encryption is called?",a:"FileVault."},
+    {q:"Which Linux command searches inside files?",a:"grep (find searches the filesystem by name)."},
+    {q:"macOS automatic versioned backup tool?",a:"Time Machine."}
+  ]
+},
+/* ============================ MODULE 18 ============================ */
+{
+  id:18, core:2,
+  title:"Attacks, Threats, and Vulnerabilities",
+  short:"Attacks & Threats",
+  blurb:"Social engineering, malware and password attacks, web exploits, the WPA ladder, and securing a SOHO router.",
+  sections:[
+    { h:"18.1 Attacks, Threats & Vulnerabilities", blocks:[
+      {t:"list", items:["Vulnerabilities: misconfigurations, unpatched software, zero-days, default credentials, physical access"]},
+      {t:"tip", k:"focus", text:"Vulnerability = a weakness. Threat = something that could exploit it. Risk = the chance and impact of that happening."},
+      {t:"sub", text:"Social engineering"},
+      {t:"list", items:["Impersonation, pretexting, tailgating, dumpster diving, shoulder surfing"]},
+      {t:"sub", text:"Phishing family"},
+      {t:"table", head:["Term","Target"], rows:[
+        ["Phishing","Mass deceptive messages"],
+        ["Spear phishing","A specific person/org"],
+        ["Whaling","Executives"],
+        ["Evil twin","Rogue Wi-Fi AP mimicking a real one"]
+      ]},
+      {t:"sub", text:"Threats & password attacks"},
+      {t:"list", items:["Malware, ransomware, trojans, worms, rootkits, insider threats, DDoS","Brute force, dictionary, rainbow table, credential stuffing"]},
+      {t:"list", items:[{l:"XSS", s:["Injects malicious script into a website"]},{l:"SQL injection", s:["Manipulates database queries via crafted input"]}]}
+    ]},
+    { h:"18.2 Wireless Security Protocols", blocks:[
+      {t:"table", head:["Protocol","Crypto / strength"], rows:[
+        ["WEP","Insecure \u2014 never use"],
+        ["WPA","TKIP (legacy)"],
+        ["WPA2","AES (strong)"],
+        ["WPA3","SAE (strongest)"]
+      ]},
+      {t:"list", items:["Auth: Open, PSK (pre-shared key), Enterprise (RADIUS)","EAP variants: PEAP, EAP-TLS (certificate-based, strongest)"]},
+      {t:"sub", text:"AAA / directory protocols"},
+      {t:"list", items:["RADIUS \u2014 AAA for Wi-Fi and VPN","TACACS+ \u2014 Cisco, granular command control","Kerberos \u2014 Windows domain auth using tickets"]}
+    ]},
+    { h:"18.3 SOHO Router Security", blocks:[
+      {t:"list", items:["Change default credentials","Update firmware","Disable WPS","Use WPA2/WPA3","Change SSID (not to personal info)"]},
+      {t:"list", items:["Enable firewall, block inbound, disable unneeded services","Port forwarding exposes internal services; UPnP is convenient but insecure \u2014 often disable it","Screened subnet (DMZ) isolates public-facing devices from the internal LAN"]},
+      {t:"note", text:"WPS lets you join Wi-Fi with an 8-digit PIN \u2014 which attackers can brute-force. Convenient, but it\u2019s a known weakness, so the exam wants it disabled."}
+    ]},
+    { h:"18.4 Additional Security Measures", blocks:[
+      {t:"list", items:["Physical access: badges, key fobs, biometrics, guards","Locks: cable, deadbolt, smart, server-rack","Alarms/surveillance: motion & door sensors, CCTV, monitoring"]}
+    ]}
+  ],
+  takeaways:["WPA2 vs WPA3","Phishing vs spear phishing vs whaling","Evil twin attacks","SQL injection & XSS","RADIUS vs TACACS+ vs Kerberos","UPnP/WPS risks; DMZ purpose; password attack types"],
+  cards:[
+    {q:"Define vulnerability, threat, and risk.",a:"Vulnerability = a weakness; threat = something that can exploit it; risk = likelihood \u00d7 impact of that exploitation."},
+    {q:"Rank WEP, WPA, WPA2, WPA3 by strength.",a:"WPA3 (SAE) > WPA2 (AES) > WPA (TKIP) > WEP (insecure)."},
+    {q:"A phishing attack aimed only at executives is called?",a:"Whaling."},
+    {q:"Why disable WPS on a SOHO router?",a:"Its 8-digit PIN can be brute-forced, undermining your Wi-Fi password."},
+    {q:"Which protocol uses tickets for Windows domain authentication?",a:"Kerberos."}
+  ]
+},
+/* ============================ MODULE 19 ============================ */
+{
+  id:19, core:2,
+  title:"Managing Security Settings",
+  short:"Managing Security",
+  blurb:"Account hardening, workstation execution control and encryption, browser security, and the malware-removal procedure.",
+  sections:[
+    { h:"19.1 Account Security", blocks:[
+      {t:"list", items:["Strong passwords: length (8\u201314+), complexity, no reuse, rotation per policy, no dictionary words","End users: lock screens, avoid suspicious links, use MFA, report oddities, no unauthorized installs","Least privilege: standard accounts for daily work, admin only when needed"]},
+      {t:"list", items:["Rename/disable the default administrator account","Disable the Guest account","Account policies: password, lockout, Kerberos, audit","Disable unused services to shrink the attack surface"]}
+    ]},
+    { h:"19.2 Workstation Security", blocks:[
+      {t:"list", items:[{l:"Execution control", s:["AppLocker, Software Restriction Policies, SmartScreen"]}]},
+      {t:"sub", text:"Trusted vs untrusted sources"},
+      {t:"list", items:["Trusted: Microsoft Store, vendor sites, signed installers","Untrusted: torrents, unknown sites, unsigned executables","Disable AutoRun/AutoPlay to block malware from removable media"]},
+      {t:"sub", text:"Defender & encryption"},
+      {t:"list", items:["Defender Antivirus: real-time + cloud protection, quarantine, signature updates","Defender Firewall: inbound/outbound rules, allowed apps, profiles","EFS encrypts individual files/folders via user certificates","BitLocker = full-disk (needs TPM or USB key); BitLocker To Go encrypts USB drives"]},
+      {t:"note", text:"EFS vs BitLocker: EFS protects specific files for a specific user; BitLocker encrypts the whole volume so a stolen drive is unreadable. They solve different problems and can be used together."}
+    ]},
+    { h:"19.3 Browser Security", blocks:[
+      {t:"list", items:["Install up-to-date browsers from trusted sources","Settings: pop-up blocking, JavaScript control, cookies, password manager","Extensions risk: malicious add-ons, excessive permissions, outdated plug-ins","Patch regularly; watch for certificate and mixed-content warnings","Privacy: Do Not Track, clear cookies, block third-party trackers"]}
+    ]},
+    { h:"19.4 Troubleshoot Workstation Security", blocks:[
+      {t:"list", items:[
+        {l:"Malware vectors", s:["Email attachments, drive-by downloads, USB, malicious ads, social engineering"]},
+        {l:"Payloads", s:["Keylogging, data theft, backdoors, botnets, destruction"]},
+        {l:"Symptoms", s:["Slow performance, pop-ups, browser redirects, disabled security tools, high CPU"]}
+      ]},
+      {t:"sub", text:"Best-practice malware removal (in order)"},
+      {t:"steps", items:["Identify and research the malware","Quarantine the infected system","Disable System Restore","Remediate (remove the malware, update tools)","Re-enable System Restore and create a clean restore point","Update the OS and apps","Educate the end user"]},
+      {t:"tip", k:"focus", text:"You disable System Restore BEFORE removal so the malware isn\u2019t preserved in a restore point, then re-enable it AFTER cleanup. The order is tested."}
+    ]}
+  ],
+  takeaways:["Password policies; least privilege","BitLocker vs EFS","Browser security settings","Malware symptoms","The 7-step malware-removal order","Firewall vs antivirus"],
+  cards:[
+    {q:"Why disable System Restore during malware removal?",a:"So malware isn\u2019t saved inside a restore point and re-infected later. Re-enable it after cleanup."},
+    {q:"BitLocker vs EFS?",a:"BitLocker encrypts the entire volume; EFS encrypts individual files/folders for a specific user."},
+    {q:"What\u2019s the first step of the malware-removal process?",a:"Identify and research the malware symptoms."},
+    {q:"Why disable AutoRun/AutoPlay?",a:"To stop malware from auto-executing off USB drives and other removable media."},
+    {q:"Three signs a workstation is infected?",a:"Pop-ups/redirects, disabled security tools, and high CPU or slow performance (any of these)."}
+  ]
+},
+/* ============================ MODULE 20 ============================ */
+{
+  id:20, core:2,
+  title:"Supporting Mobile Software",
+  short:"Mobile Software",
+  blurb:"Mobile OS security, MDM/EMM, two-factor methods, and troubleshooting mobile OS, app, connectivity, and security issues.",
+  sections:[
+    { h:"20.1 Mobile OS Security", blocks:[
+      {t:"list", items:["Screen locks: PIN, password, pattern, biometrics, Smart Lock (Android)"]},
+      {t:"tip", k:"focus", text:"Biometrics add convenience but still require a fallback (PIN/password) for when they fail."},
+      {t:"list", items:["Mobile security software: anti-malware, app scanning, remote wipe, tracking, secure browsing"]},
+      {t:"sub", text:"EMM vs MDM"},
+      {t:"list", items:["EMM = broad: device provisioning, app management, policy, remote wipe, encryption","MDM = a subset of EMM focused on device config, security policy, remote lock/wipe, app whitelisting"]},
+      {t:"list", items:["2FA methods: SMS codes, authenticator apps, push notifications, hardware tokens","Data security: encryption, sandboxing, secure containers, VPN, permissions","Locator apps (Find My iPhone / Find My Device): track, lock, message, remote wipe"]},
+      {t:"note", text:"Remote wipe vs factory reset: a factory reset is done by whoever holds the device; remote wipe is triggered by IT/EMM over the network for a lost or stolen device \u2014 even if you never get it back."}
+    ]},
+    { h:"20.2 Troubleshoot Mobile OS & App Software", blocks:[
+      {t:"list", items:["Tools: force stop, restart, Safe Mode, app manager, battery/storage monitors","General steps: reboot, check updates, clear cache, remove bad apps, reset network settings"]},
+      {t:"sub", text:"By symptom"},
+      {t:"table", head:["Area","Symptoms / fixes"], rows:[
+        ["Device/OS","Frozen screen, overheating, battery drain, update failures"],
+        ["App","Crashing/freezing \u2192 clear cache/data, reinstall, update"],
+        ["Connectivity","Wi-Fi/Bluetooth/cellular/VPN \u2192 toggle Airplane Mode, reset network, forget/reconnect"]
+      ]}
+    ]},
+    { h:"20.3 Troubleshoot Mobile OS & App Security", blocks:[
+      {t:"list", items:["Rooting/jailbreaking removes OS protections, allows unauthorized apps, raises malware risk, voids warranty","Trusted sources: Google Play, Apple App Store, enterprise stores","Untrusted: sideloaded APKs, third-party stores, unknown sites"]},
+      {t:"sub", text:"Signs of compromise"},
+      {t:"list", items:["Rapid battery drain","Overheating","Pop-ups","Unauthorized apps","High data usage","Redirected browser"]}
+    ]}
+  ],
+  takeaways:["MDM vs EMM","Remote wipe vs factory reset","App sandboxing","Mobile malware symptoms","Troubleshooting steps for mobile apps","Trusted vs untrusted app sources"],
+  cards:[
+    {q:"Remote wipe vs factory reset?",a:"Factory reset is local (device in hand); remote wipe is triggered over the network by IT/EMM for a lost or stolen device."},
+    {q:"Is MDM the same as EMM?",a:"MDM is a subset of EMM, focused specifically on device configuration and security policies."},
+    {q:"Why is rooting/jailbreaking a security concern?",a:"It removes built-in OS protections, allows unauthorized apps, increases malware risk, and voids the warranty."},
+    {q:"A crashing app \u2014 first fixes?",a:"Clear its cache/data, update it, or reinstall it."},
+    {q:"Wi-Fi won\u2019t connect on a phone \u2014 quick steps?",a:"Toggle Airplane Mode, reset network settings, or forget and reconnect to the network."}
+  ]
+},
+/* ============================ MODULE 21 ============================ */
+{
+  id:21, core:2,
+  title:"Using Data Security",
+  short:"Data Security",
+  blurb:"Backup methods and the 3-2-1 rule, regulated data classes, the incident-response sequence, destruction methods, and AI policy.",
+  sections:[
+    { h:"21.1 Data Backup & Recovery", blocks:[
+      {t:"list", items:["Define what is backed up, how often, where, and who verifies","Backups protect against hardware failure, ransomware, accidental deletion, corruption"]},
+      {t:"sub", text:"Backup methods"},
+      {t:"table", head:["Method","What it captures"], rows:[
+        ["Full","Everything"],
+        ["Incremental","Changes since the last incremental"],
+        ["Differential","Changes since the last full"],
+        ["Image","Full system snapshot"],
+        ["File History / OneDrive","User file versioning"]
+      ]},
+      {t:"tip", k:"tip", text:"Incremental = fastest backup, slowest restore. Differential = slower backup, faster restore."},
+      {t:"note", text:"Restore math: incrementals only store the latest changes, so restoring means replaying the full backup plus every increment in order. A differential always measures from the last full, so you only need the full plus one differential \u2014 fewer pieces, faster restore."},
+      {t:"sub", text:"Media & testing"},
+      {t:"list", items:["Media: external HDD/SSD, NAS, cloud, tape (enterprise) \u2014 reliable, encrypted, offsite","Test restores regularly; follow the 3-2-1 rule"]},
+      {t:"list", items:[{l:"3-2-1 rule", s:["3 copies of the data","2 different media types","1 copy offsite"]}]}
+    ]},
+    { h:"21.2 Data Handling Best Practices", blocks:[
+      {t:"sub", text:"Regulated data classes"},
+      {t:"table", head:["Class","Data / regulation"], rows:[
+        ["PII","Personal data"],
+        ["PHI","Medical data (HIPAA)"],
+        ["PCI","Payment card data (PCI-DSS)"],
+        ["GDPR","EU personal data protection"]
+      ]},
+      {t:"list", items:["Avoid pirated software, unauthorized media, illegal content, copyright violations"]},
+      {t:"sub", text:"Incident response (CompTIA order)"},
+      {t:"steps", items:["Identify","Report","Preserve evidence","Contain","Eradicate","Recover","Document"]},
+      {t:"sub", text:"Data destruction methods"},
+      {t:"table", head:["Method","How"], rows:[
+        ["Shredding","Physical destruction"],
+        ["Degaussing","Magnetic wipe (HDDs)"],
+        ["Low-level format","Overwriting"],
+        ["Secure erase","SSD-safe wiping"],
+        ["Incineration","Complete destruction"]
+      ]},
+      {t:"note", text:"Degaussing erases magnetic platters but does nothing to an SSD (no magnetism). For SSDs use Secure Erase or physical shredding. Matching method to media is a favorite question."}
+    ]},
+    { h:"21.3 Artificial Intelligence", blocks:[
+      {t:"list", items:["AI uses: automation, predictive maintenance, chatbots, security monitoring","AI policy must define acceptable use, data handling, privacy, transparency","Limitations: inaccurate results, missed context, bias, needs human oversight"]},
+      {t:"tip", k:"focus", text:"Private AI = internal and controlled. Public AI = shared cloud. Never put sensitive data into a public AI tool."}
+    ]}
+  ],
+  takeaways:["Full vs incremental vs differential backups","The 3-2-1 backup rule","Incident-response steps in order","Data destruction methods (match to media)","PII vs PHI vs PCI","AI limitations & public vs private AI"],
+  cards:[
+    {q:"State the 3-2-1 backup rule.",a:"3 copies of the data, on 2 different media types, with 1 copy stored offsite."},
+    {q:"Incremental vs differential restore speed?",a:"Differential restores faster (full + one differential); incremental restores slower (full + every increment)."},
+    {q:"How do you securely wipe an SSD \u2014 and why not degaussing?",a:"Use Secure Erase or shredding; degaussing only affects magnetic media, so it does nothing to an SSD."},
+    {q:"Give the CompTIA incident-response order.",a:"Identify, Report, Preserve evidence, Contain, Eradicate, Recover, Document."},
+    {q:"Can you paste customer records into a public AI chatbot?",a:"No \u2014 sensitive data must never go into public AI tools; use private/controlled AI."}
+  ]
+},
+/* ============================ MODULE 22 ============================ */
+{
+  id:22, core:2,
+  title:"Implementing Operational Procedures",
+  short:"Operational Procedures",
+  blurb:"Change and asset management, the safety and environmental rules that are heavily tested, and scripting fundamentals.",
+  sections:[
+    { h:"22.1 Change & Inventory Management", blocks:[
+      {t:"list", items:[{l:"Change request includes", s:["Reason","Scope","Impact","Rollback plan","Approval requirements"]}]},
+      {t:"list", items:["Risk analysis weighs downtime, security risk, user impact, cost vs benefit","CAB (Change Advisory Board) reviews and approves/denies changes","Implementation: schedule, communicate, implement, test, document"]},
+      {t:"sub", text:"Asset management"},
+      {t:"list", items:["Tracks hardware, software licenses, warranties, configuration (tool: CMDB)","Licensing: OEM vs Retail, subscription; plus warranty and service agreements"]},
+      {t:"note", text:"A rollback plan is the safety net the exam keeps returning to: if a change breaks something, you need a documented, tested way to put things back exactly as they were. High-risk changes get more approvals before they\u2019re allowed."}
+    ]},
+    { h:"22.2 Safety & Environmental Procedures", blocks:[
+      {t:"list", items:["Compliance: OSHA, environmental regulations, company policy"]},
+      {t:"sub", text:"Electrical safety & ESD"},
+      {t:"list", items:["Avoid live circuits; use insulated tools; understand grounding; lockout/tagout","ESD mitigation: anti-static wrist strap, anti-static mat, grounding, handle by edges"]},
+      {t:"sub", text:"Power issues & mitigations"},
+      {t:"table", head:["Issue","Meaning"], rows:[
+        ["Brownout","Reduced voltage"],
+        ["Blackout","Total power loss"],
+        ["Surge","Brief over-voltage"],
+        ["Spike","Sharp instantaneous over-voltage"]
+      ]},
+      {t:"list", items:["Mitigation tools: UPS, surge protector, line conditioner"]},
+      {t:"tip", k:"tip", text:"A surge protector only absorbs over-voltage. A UPS also provides battery backup during a blackout/brownout so you can save and shut down cleanly."},
+      {t:"list", items:["Responsible disposal: recycling, e-waste, hazardous materials, chain of custody"]}
+    ]},
+    { h:"22.3 Scripting Basics", blocks:[
+      {t:"table", head:["Type","File / environment"], rows:[
+        ["Shell script","Bash/zsh \u2014 .sh (Linux/macOS)"],
+        ["Batch","Windows \u2014 .bat"],
+        ["PowerShell","Windows \u2014 .ps1 (object-oriented, powerful)"],
+        ["JavaScript / Python","Cross-platform automation, data, web"]
+      ]},
+      {t:"sub", text:"Core constructs"},
+      {t:"list", items:["Variables, loops, functions, comments","Conditionals (if/then)"]},
+      {t:"code", text:"if [ condition ]; then\n   commands\nfi"},
+      {t:"list", items:["Use cases: automate backups, create accounts, monitor logs, deploy software"]},
+      {t:"sub", text:"Best practices"},
+      {t:"list", items:["Comment your code","Use version control","Test scripts before deploying","Never hard-code credentials"]}
+    ]}
+  ],
+  takeaways:["Change-management steps & the rollback plan","CAB purpose","ESD prevention","UPS vs surge protector","Basic scripting logic; PowerShell vs Bash","Environmental disposal rules"],
+  cards:[
+    {q:"What\u2019s the single most important part of a change request for recovery?",a:"The rollback plan \u2014 a tested way to undo the change if it fails."},
+    {q:"UPS vs surge protector?",a:"A surge protector absorbs over-voltage only; a UPS adds battery backup to ride through blackouts/brownouts."},
+    {q:"What does a CAB do?",a:"The Change Advisory Board reviews change requests and approves or denies them."},
+    {q:"Name two ESD mitigation methods.",a:"Anti-static wrist strap and anti-static mat (plus grounding and handling parts by their edges)."},
+    {q:"PowerShell vs Bash file extensions?",a:"PowerShell scripts are .ps1; shell scripts are .sh."}
+  ]
+}
+];
+/* ============================================================
+   A+ STRATA — app logic
+   Vanilla JS. No localStorage (uses window.storage w/ fallback).
+   ============================================================ */
+(function () {
+  "use strict";
+
+  var TOTAL = MODULES.length;
+  var byId = {};
+  MODULES.forEach(function (m) { byId[m.id] = m; });
+
+  /* ---------- progress persistence ---------- */
+  var DONE = {};                 // { id: true }
+  var STORE_KEY = "aplus:strata:done";
+  var memOnly = false;
+
+  function persist() {
+    var ids = Object.keys(DONE).filter(function (k) { return DONE[k]; }).map(Number);
+    if (memOnly) return;
+    try {
+      var p = window.storage && window.storage.set(STORE_KEY, JSON.stringify(ids), false);
+      if (p && p.catch) p.catch(function () { memOnly = true; });
+    } catch (e) { memOnly = true; }
+  }
+
+  function loadProgress() {
+    return new Promise(function (resolve) {
+      var done = false;
+      var finish = function () { if (!done) { done = true; resolve(); } };
+      try {
+        if (!window.storage || !window.storage.get) { memOnly = true; return finish(); }
+        var r = window.storage.get(STORE_KEY, false);
+        if (r && r.then) {
+          r.then(function (res) {
+            try {
+              if (res && res.value) JSON.parse(res.value).forEach(function (id) { DONE[id] = true; });
+            } catch (e) {}
+            finish();
+          }).catch(function () { memOnly = true; finish(); });
+        } else { finish(); }
+      } catch (e) { memOnly = true; finish(); }
+      setTimeout(finish, 1200); // never hang on load
+    });
+  }
+
+  /* ---------- helpers ---------- */
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  function el(tag, cls, html) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (html != null) n.innerHTML = html;
+    return n;
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+  function pad(n) { return n < 10 ? "0" + n : "" + n; }
+
+  var app = $("#app");
+  var content = $("#content");
+  var layersNav = $("#layers");
+
+  /* ---------- sidebar (strata) ---------- */
+  function buildLayers() {
+    layersNav.innerHTML = "";
+    var groups = [
+      { core: 1, label: "Core 1 · Hardware & Networks" },
+      { core: 2, label: "Core 2 · Software & Security" }
+    ];
+    groups.forEach(function (g) {
+      layersNav.appendChild(el("div", "group-h", esc(g.label)));
+      MODULES.filter(function (m) { return m.core === g.core; }).forEach(function (m) {
+        var b = el("button", "layer");
+        b.dataset.id = m.id;
+        b.dataset.search = (m.title + " " + (m.short || "") + " " + (m.blurb || "")).toLowerCase();
+        b.innerHTML =
+          '<span class="num">' + pad(m.id) + '</span>' +
+          '<span class="ttl">' + esc(m.short || m.title) + '</span>' +
+          '<span class="tick"></span>';
+        b.addEventListener("click", function () { openModule(m.id, true); });
+        layersNav.appendChild(b);
+      });
+    });
+    syncLayerState();
+  }
+
+  function syncLayerState() {
+    var done = 0;
+    Array.prototype.forEach.call(layersNav.querySelectorAll(".layer"), function (b) {
+      var id = +b.dataset.id;
+      b.classList.toggle("done", !!DONE[id]);
+      b.classList.toggle("active", id === currentId);
+      if (DONE[id]) done++;
+    });
+    var pct = Math.round((done / TOTAL) * 100);
+    $("#progN").innerHTML = done + "<em> / " + TOTAL + "</em>";
+    $("#progBar").style.width = pct + "%";
+    $("#tpProg").textContent = done + "/" + TOTAL;
+  }
+
+  /* ---------- block renderer ---------- */
+  function renderList(b) {
+    var ul = el("ul", "bul");
+    (b.items || []).forEach(function (it) {
+      var li = document.createElement("li");
+      if (typeof it === "string") {
+        li.innerHTML = esc(it);
+      } else {
+        li.innerHTML = '<span class="lab">' + esc(it.l) + "</span>";
+        if (it.s && it.s.length) {
+          var sub = el("ul", "sub-bul");
+          it.s.forEach(function (x) { sub.appendChild(el("li", null, esc(x))); });
+          li.appendChild(sub);
+        }
+      }
+      ul.appendChild(li);
+    });
+    return ul;
+  }
+
+  function renderBlock(b) {
+    switch (b.t) {
+      case "p":
+        return el("p", null, esc(b.text));
+      case "sub":
+        return el("div", "sub", esc(b.text));
+      case "note":
+        var n = el("div", "note");
+        n.innerHTML = '<div class="nh">In plain terms</div><p>' + esc(b.text) + "</p>";
+        return n;
+      case "list":
+        return renderList(b);
+      case "steps":
+        var ol = el("ol", "steps");
+        (b.items || []).forEach(function (s) { ol.appendChild(el("li", null, esc(s))); });
+        return ol;
+      case "tip":
+        var t = el("div", "tip " + (b.k === "focus" ? "focus" : "tip-t"));
+        var tag = b.k === "focus" ? "Exam focus" : "Tip";
+        t.innerHTML = '<span class="tg">' + tag + '</span><p>' + esc(b.text) + "</p>";
+        return t;
+      case "code":
+        var pre = el("pre", "code");
+        pre.textContent = b.text;
+        return pre;
+      case "table":
+        var tbl = el("table", "dt");
+        var thead = el("thead");
+        var hr = el("tr");
+        (b.head || []).forEach(function (h) { hr.appendChild(el("th", null, esc(h))); });
+        thead.appendChild(hr); tbl.appendChild(thead);
+        var tb = el("tbody");
+        (b.rows || []).forEach(function (row) {
+          var tr = el("tr");
+          row.forEach(function (c) { tr.appendChild(el("td", null, esc(c))); });
+          tb.appendChild(tr);
+        });
+        tbl.appendChild(tb);
+        var wrap = el("div"); wrap.style.overflowX = "auto"; wrap.style.margin = "0 0 18px";
+        wrap.appendChild(tbl);
+        return wrap;
+      default:
+        return el("p", null, esc(b.text || ""));
+    }
+  }
+
+  /* ---------- reader view ---------- */
+  function openModule(id, fromNav) {
+    var m = byId[id];
+    if (!m) return;
+    currentId = id;
+
+    var frag = document.createDocumentFragment();
+
+    // head
+    var head = el("div", "r-head");
+    var eye = el("div");
+    eye.style.cssText = "font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:14px";
+    eye.textContent = "Module " + pad(m.id) + " · Core " + m.core;
+    head.appendChild(eye);
+    head.appendChild(el("h2", null, esc(m.title)));
+    if (m.blurb) {
+      var bl = el("p", null, esc(m.blurb));
+      bl.style.cssText = "font-size:18px;color:var(--ink-2);max-width:64ch;margin:0 0 22px";
+      head.appendChild(bl);
+    }
+    var mark = el("button", "markbtn" + (DONE[id] ? " done" : ""));
+    mark.innerHTML = '<span class="box"></span><span class="lbl">' +
+      (DONE[id] ? "Completed" : "Mark complete") + "</span>";
+    mark.addEventListener("click", function () {
+      DONE[id] = !DONE[id];
+      mark.classList.toggle("done", !!DONE[id]);
+      $(".lbl", mark).textContent = DONE[id] ? "Completed" : "Mark complete";
+      syncLayerState();
+      persist();
+    });
+    head.appendChild(mark);
+    frag.appendChild(head);
+
+    // sections
+    (m.sections || []).forEach(function (sec, i) {
+      var s = el("section", "section");
+      var sh = el("div", "s-h");
+      sh.innerHTML = '<span style="font-weight:700">' + pad(i + 1) + "</span>" + esc(sec.h);
+      s.appendChild(sh);
+      (sec.blocks || []).forEach(function (b) { s.appendChild(renderBlock(b)); });
+      frag.appendChild(s);
+    });
+
+    // takeaways
+    if (m.takeaways && m.takeaways.length) {
+      var tk = el("div", "takeaways");
+      tk.appendChild(el("h4", null, '<span class="pk">Strata</span> Key takeaways'));
+      var ul = el("ul");
+      m.takeaways.forEach(function (t) { ul.appendChild(el("li", null, esc(t))); });
+      tk.appendChild(ul);
+      frag.appendChild(tk);
+    }
+
+    // flashcards
+    if (m.cards && m.cards.length) {
+      frag.appendChild(el("div", "fc-head", "Flashcards · self-check"));
+      frag.appendChild(el("p", "fc-sub", "Tap a card to flip. Cover the answer and recall it first."));
+      var grid = el("div", "fc-grid");
+      m.cards.forEach(function (c) {
+        var card = el("button", "fc");
+        card.innerHTML =
+          '<div class="fc-inner">' +
+            '<div class="fc-face fc-q"><span class="fc-tag">Q</span><span class="fc-txt">' + esc(c.q) + "</span></div>" +
+            '<div class="fc-face fc-a"><span class="fc-tag">A</span><span class="fc-txt">' + esc(c.a) + "</span></div>" +
+          "</div>";
+        card.addEventListener("click", function () { card.classList.toggle("flip"); });
+        grid.appendChild(card);
+      });
+      frag.appendChild(grid);
+    }
+
+    // prev / next
+    var idx = MODULES.findIndex(function (x) { return x.id === id; });
+    var prev = MODULES[idx - 1], next = MODULES[idx + 1];
+    var nav = el("div", "r-nav");
+    var pb = el("button", "prev");
+    pb.disabled = !prev;
+    pb.innerHTML = '<div class="dir">← Previous</div><div class="nm">' +
+      (prev ? esc(prev.short || prev.title) : "—") + "</div>";
+    if (prev) pb.addEventListener("click", function () { openModule(prev.id, true); });
+    var nb = el("button", "next");
+    nb.disabled = !next;
+    nb.innerHTML = '<div class="dir">Next →</div><div class="nm">' +
+      (next ? esc(next.short || next.title) : "—") + "</div>";
+    if (next) nb.addEventListener("click", function () { openModule(next.id, true); });
+    nav.appendChild(pb); nav.appendChild(nb);
+    frag.appendChild(nav);
+
+    content.innerHTML = "";
+    content.appendChild(frag);
+    window.scrollTo(0, 0);
+    content.parentElement.scrollTop = 0;
+    syncLayerState();
+    if (fromNav) closeDrawer();
+  }
+
+  /* ---------- overview view ---------- */
+  function openOverview() {
+    currentId = null;
+    var frag = document.createDocumentFragment();
+
+    var hero = el("div", "hero");
+    hero.innerHTML =
+      '<div class="eyebrow">CompTIA A+ · 220-1101 & 220-1102</div>' +
+      '<h1>Dig through every layer of the <span>A+</span> exam.</h1>' +
+      '<p>All ' + TOTAL + ' modules of Core 1 and Core 2, rebuilt as readable strata — ' +
+      'hardware and networks first, then operating systems and security. Each layer adds ' +
+      'plain-language clarifications and self-check flashcards on top of the source material.</p>';
+    var meta = el("div", "meta");
+    var c1 = MODULES.filter(function (m) { return m.core === 1; }).length;
+    var c2 = MODULES.filter(function (m) { return m.core === 2; }).length;
+    var cards = MODULES.reduce(function (a, m) { return a + (m.cards ? m.cards.length : 0); }, 0);
+    [[TOTAL, "Modules"], [c1, "Core 1"], [c2, "Core 2"], [cards, "Flashcards"]].forEach(function (x) {
+      meta.appendChild(el("div", null, "<b>" + x[0] + "</b><small>" + x[1] + "</small>"));
+    });
+    hero.appendChild(meta);
+    frag.appendChild(hero);
+
+    [{ core: 1, label: "Core 1 · Hardware & Networks" },
+     { core: 2, label: "Core 2 · Software & Security" }].forEach(function (g) {
+      var gh = el("div", "fc-head");
+      gh.style.marginTop = "8px";
+      gh.textContent = g.label;
+      frag.appendChild(gh);
+      var grid = el("div", "grid");
+      grid.style.marginBottom = "10px";
+      MODULES.filter(function (m) { return m.core === g.core; }).forEach(function (m) {
+        var card = el("button", "card" + (DONE[m.id] ? " done" : ""));
+        card.dataset.core = m.core;
+        card.innerHTML =
+          '<div class="cnum"><span>MODULE ' + pad(m.id) + '</span><span class="cdot"></span></div>' +
+          "<h3>" + esc(m.title) + "</h3>" +
+          "<p>" + esc(m.short || m.blurb || "") + "</p>";
+        card.addEventListener("click", function () { openModule(m.id, true); });
+        grid.appendChild(card);
+      });
+      frag.appendChild(grid);
+    });
+
+    content.innerHTML = "";
+    content.appendChild(frag);
+    window.scrollTo(0, 0);
+    syncLayerState();
+    closeDrawer();
+  }
+
+  /* ---------- search ---------- */
+  function wireSearch() {
+    var inp = $("#search");
+    inp.addEventListener("input", function () {
+      var q = inp.value.trim().toLowerCase();
+      Array.prototype.forEach.call(layersNav.querySelectorAll(".layer"), function (b) {
+        b.classList.toggle("hide", q && b.dataset.search.indexOf(q) === -1);
+      });
+      Array.prototype.forEach.call(layersNav.querySelectorAll(".group-h"), function (gh) {
+        var n = gh.nextElementSibling, anyVisible = false;
+        while (n && n.classList.contains("layer")) {
+          if (!n.classList.contains("hide")) anyVisible = true;
+          n = n.nextElementSibling;
+        }
+        gh.style.display = anyVisible ? "" : "none";
+      });
+    });
+  }
+
+  /* ---------- mobile drawer ---------- */
+  function closeDrawer() { app.classList.remove("nav-open"); }
+  function wireDrawer() {
+    $("#hamb").addEventListener("click", function () { app.classList.toggle("nav-open"); });
+    $("#scrim").addEventListener("click", closeDrawer);
+  }
+
+  /* ---------- reset ---------- */
+  function wireReset() {
+    $("#resetBtn").addEventListener("click", function () {
+      if (!window.confirm("Clear all progress? This resets every completed module.")) return;
+      DONE = {};
+      persist();
+      syncLayerState();
+      if (currentId) openModule(currentId, false); else openOverview();
+    });
+  }
+
+  /* ---------- boot ---------- */
+  var currentId = null;
+  $("#homeBtn").addEventListener("click", openOverview);
+
+  buildLayers();
+  wireSearch();
+  wireDrawer();
+  wireReset();
+
+  loadProgress().then(function () {
+    buildLayers();
+    openOverview();
+  });
+})();
+
+</script>
+</body>
+</html>
