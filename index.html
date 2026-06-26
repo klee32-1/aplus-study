@@ -308,7 +308,24 @@ pre.code .cm{color:#A99C7E}
 }
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important; animation:none!important; scroll-behavior:auto!important}
-}
+}  /* ---- exam blueprint (domain weightings) ---- */
+  .blueprint{margin:0 0 30px}
+  .bp-intro{font-size:15px;color:var(--ink-2);max-width:64ch;margin:0 0 20px}
+  .bp-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+  @media (max-width:760px){.bp-grid{grid-template-columns:1fr;gap:24px}}
+  .bp-col{background:var(--paper-3);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+  .bp-col h5{margin:0 0 4px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+  .bp-col .bp-exam{margin:0 0 16px;font-family:var(--display);font-size:19px;font-weight:600;color:var(--ink)}
+  .bp-row{margin:0 0 13px}
+  .bp-row:last-child{margin-bottom:0}
+  .bp-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:0 0 5px}
+  .bp-name{font-size:14px;color:var(--ink);font-weight:500}
+  .bp-pct{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink-2);flex:none}
+  .bp-track{height:8px;background:var(--paper);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .bp-fill{height:100%;border-radius:6px}
+  .bp-c1 .bp-fill{background:linear-gradient(90deg,var(--clay),var(--clay-deep))}
+  .bp-c2 .bp-fill{background:linear-gradient(90deg,var(--moss),var(--moss-deep))}
+  .bp-note{margin:14px 0 0;font-size:12.5px;color:var(--ink-3);font-style:italic}
 </style>
 </head>
 <body>
@@ -368,6 +385,23 @@ const MODULES = [{"id":1,"core":1,"title":"What IT Specialists Do & Troubleshoot
   var TOTAL = MODULES.length;
   var byId = {};
   MODULES.forEach(function (m) { byId[m.id] = m; });
+
+  /* ---- official exam domain weightings ---- */
+  var DOMAINS = {
+    c1: { exam: "Core 1 · 220-1201", rows: [
+      ["1.0  Mobile Devices", 13],
+      ["2.0  Networking", 23],
+      ["3.0  Hardware", 25],
+      ["4.0  Virtualization & Cloud Computing", 11],
+      ["5.0  Hardware & Network Troubleshooting", 28]
+    ]},
+    c2: { exam: "Core 2 · 220-1202", rows: [
+      ["1.0  Operating Systems", 28],
+      ["2.0  Security", 28],
+      ["3.0  Software Troubleshooting", 23],
+      ["4.0  Operational Procedures", 21]
+    ]}
+  };
 
   /* ---------- progress persistence ---------- */
   var DONE = {};                 // { id: true }
@@ -643,6 +677,33 @@ const MODULES = [{"id":1,"core":1,"title":"What IT Specialists Do & Troubleshoot
     });
     hero.appendChild(meta);
     frag.appendChild(hero);
+
+    // exam blueprint — official domain weightings
+    var bp = el("div", "blueprint");
+    bp.appendChild(el("div", "fc-head", "Exam blueprint · what each test weights"));
+    bp.appendChild(el("p", "bp-intro",
+      "The two exams are scored across weighted domains. The bars below show the official " +
+      "percentage each domain contributes — a guide to where your study time pays off most."));
+    var bpGrid = el("div", "bp-grid");
+    [["c1", "bp-c1"], ["c2", "bp-c2"]].forEach(function (pair) {
+      var d = DOMAINS[pair[0]];
+      var col = el("div", "bp-col " + pair[1]);
+      col.appendChild(el("h5", null, "Exam"));
+      col.appendChild(el("div", "bp-exam", esc(d.exam)));
+      d.rows.forEach(function (r) {
+        var row = el("div", "bp-row");
+        row.innerHTML =
+          '<div class="bp-top"><span class="bp-name">' + esc(r[0]) +
+          '</span><span class="bp-pct">' + r[1] + '%</span></div>' +
+          '<div class="bp-track"><div class="bp-fill" style="width:' + r[1] + '%"></div></div>';
+        col.appendChild(row);
+      });
+      bpGrid.appendChild(col);
+    });
+    bp.appendChild(bpGrid);
+    bp.appendChild(el("p", "bp-note",
+      "Source: CompTIA A+ 220-1201 & 220-1202 (V15) exam objectives. Percentages are approximate and set by CompTIA."));
+    frag.appendChild(bp);
 
     [{ core: 1, label: "Core 1 · Hardware & Networks" },
      { core: 2, label: "Core 2 · Software & Security" }].forEach(function (g) {
