@@ -251,9 +251,9 @@ pre.code .cm{color:#A99C7E}
 .fc-sub{font-size:14.5px; color:var(--ink-2); margin:0 0 18px; font-style:italic}
 .fc-grid{display:grid; gap:11px}
 .fc{
-  perspective:1400px; min-height:84px; cursor:pointer; background:none;
+  perspective:1400px; background:none; position:relative;
 }
-.fc-inner{position:relative; width:100%; min-height:84px; transition:transform .5s cubic-bezier(.2,.85,.3,1); transform-style:preserve-3d; text-align:left}
+.fc-inner{position:relative; width:100%; min-height:84px; cursor:pointer; transition:transform .5s cubic-bezier(.2,.85,.3,1); transform-style:preserve-3d; text-align:left}
 .fc.flip .fc-inner{transform:rotateX(180deg)}
 .fc-face{
   position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden;
@@ -268,6 +268,35 @@ pre.code .cm{color:#A99C7E}
 .fc-txt{font-size:15.5px; line-height:1.45}
 .fc-q .fc-txt{color:var(--ink); font-weight:500}
 .fc-a .fc-txt{color:var(--paper-3)}
+
+/* ---- flashcard self-grading ---- */
+.fc-score{display:flex; flex-wrap:wrap; gap:8px 14px; margin:0 0 16px; align-items:center}
+.fc-score .sc{font-size:12.5px; color:var(--ink-2); display:inline-flex; align-items:center; gap:5px}
+.fc-score .sc b{font-family:var(--mono); font-size:14px; color:var(--ink)}
+.fc-score .sc-r b{color:var(--moss-deep)}
+.fc-score .sc-w b{color:var(--clay-deep)}
+.fc-score .sc-p{margin-left:auto; font-family:var(--mono); font-weight:600; color:var(--ink); background:var(--paper-2); border:1px solid var(--line); padding:3px 10px; border-radius:20px}
+.fc-grade{display:flex; gap:7px; margin-top:7px}
+.fc-mark{
+  flex:1; font-family:var(--mono); font-size:11px; letter-spacing:.04em; font-weight:600;
+  padding:7px 8px; border-radius:var(--rad); cursor:pointer; transition:.14s;
+  background:var(--paper-2); border:1px solid var(--line); color:var(--ink-2);
+}
+.fc-mark:hover{border-color:var(--ink-3); color:var(--ink)}
+.fc-yes:hover{border-color:var(--moss); color:var(--moss-deep)}
+.fc-no:hover{border-color:var(--clay); color:var(--clay-deep)}
+.fc-correct .fc-yes{background:var(--moss); border-color:var(--moss); color:var(--paper-3)}
+.fc-wrong .fc-no{background:var(--clay); border-color:var(--clay); color:var(--paper-3)}
+/* graded state ring + corner badge on the card */
+.fc-correct .fc-inner .fc-face{box-shadow:inset 0 0 0 2px var(--moss)}
+.fc-wrong .fc-inner .fc-face{box-shadow:inset 0 0 0 2px var(--clay)}
+.fc-badge{position:absolute; top:-7px; right:-7px; width:22px; height:22px; border-radius:50%; display:none; z-index:3; backface-visibility:hidden; box-shadow:0 1px 4px rgba(43,34,24,.25)}
+.fc-correct .fc-badge,.fc-wrong .fc-badge{display:block}
+.fc-correct .fc-badge{background:var(--moss)}
+.fc-wrong .fc-badge{background:var(--clay)}
+.fc-badge::after{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--paper-3); font-size:12px; font-weight:700; line-height:1}
+.fc-correct .fc-badge::after{content:"\2713"}
+.fc-wrong .fc-badge::after{content:"\2717"}
 
 /* footer nav */
 .r-nav{display:flex; justify-content:space-between; gap:14px; margin-top:46px; padding-top:26px; border-top:1px solid var(--line)}
@@ -405,8 +434,18 @@ const MODULES = [{"id":1,"core":1,"title":"What IT Specialists Do & Troubleshoot
 
   /* ---------- progress persistence ---------- */
   var DONE = {};                 // { id: true }
+  var GRADES = {};               // { "modId:cardIdx": "correct" | "wrong" }
   var STORE_KEY = "aplus:strata:done";
+  var GRADE_KEY = "aplus:strata:grades";
   var memOnly = false;
+
+  function persistGrades() {
+    if (memOnly) return;
+    try {
+      var p = window.storage && window.storage.set(GRADE_KEY, JSON.stringify(GRADES), false);
+      if (p && p.catch) p.catch(function () { memOnly = true; });
+    } catch (e) { memOnly = true; }
+  }
 
   function persist() {
     var ids = Object.keys(DONE).filter(function (k) { return DONE[k]; }).map(Number);
@@ -420,20 +459,36 @@ const MODULES = [{"id":1,"core":1,"title":"What IT Specialists Do & Troubleshoot
   function loadProgress() {
     return new Promise(function (resolve) {
       var done = false;
-      var finish = function () { if (!done) { done = true; resolve(); } };
+      var pending = 2;
+      var finish = function () { if (!done && --pending <= 0) { done = true; resolve(); } };
+      var force = function () { if (!done) { done = true; resolve(); } };
+      // completion
       try {
-        if (!window.storage || !window.storage.get) { memOnly = true; return finish(); }
-        var r = window.storage.get(STORE_KEY, false);
-        if (r && r.then) {
-          r.then(function (res) {
-            try {
-              if (res && res.value) JSON.parse(res.value).forEach(function (id) { DONE[id] = true; });
-            } catch (e) {}
-            finish();
-          }).catch(function () { memOnly = true; finish(); });
-        } else { finish(); }
+        if (!window.storage || !window.storage.get) { memOnly = true; finish(); }
+        else {
+          var r = window.storage.get(STORE_KEY, false);
+          if (r && r.then) {
+            r.then(function (res) {
+              try { if (res && res.value) JSON.parse(res.value).forEach(function (id) { DONE[id] = true; }); } catch (e) {}
+              finish();
+            }).catch(function () { memOnly = true; finish(); });
+          } else { finish(); }
+        }
       } catch (e) { memOnly = true; finish(); }
-      setTimeout(finish, 1200); // never hang on load
+      // grades
+      try {
+        if (!window.storage || !window.storage.get) { finish(); }
+        else {
+          var g = window.storage.get(GRADE_KEY, false);
+          if (g && g.then) {
+            g.then(function (res) {
+              try { if (res && res.value) GRADES = JSON.parse(res.value) || {}; } catch (e) {}
+              finish();
+            }).catch(function () { finish(); });
+          } else { finish(); }
+        }
+      } catch (e) { finish(); }
+      setTimeout(force, 1500); // never hang on load
     });
   }
 
@@ -616,16 +671,53 @@ const MODULES = [{"id":1,"core":1,"title":"What IT Specialists Do & Troubleshoot
     // flashcards
     if (m.cards && m.cards.length) {
       frag.appendChild(el("div", "fc-head", "Flashcards · self-check"));
-      frag.appendChild(el("p", "fc-sub", "Tap a card to flip. Cover the answer and recall it first."));
+      frag.appendChild(el("p", "fc-sub", "Tap a card to flip. Recall the answer first, then mark whether you got it right."));
+
+      var score = el("div", "fc-score");
+      frag.appendChild(score);
+      var updateScore = function () {
+        var right = 0, wrong = 0;
+        m.cards.forEach(function (c, i) {
+          var v = GRADES[id + ":" + i];
+          if (v === "correct") right++; else if (v === "wrong") wrong++;
+        });
+        var total = m.cards.length, graded = right + wrong;
+        var pct = graded ? Math.round((right / graded) * 100) : 0;
+        score.innerHTML =
+          '<span class="sc sc-r"><b>' + right + '</b> correct</span>' +
+          '<span class="sc sc-w"><b>' + wrong + '</b> missed</span>' +
+          '<span class="sc sc-u"><b>' + (total - graded) + '</b> unmarked</span>' +
+          (graded ? '<span class="sc sc-p">' + pct + '% recall</span>' : '');
+      };
+      updateScore();
+
       var grid = el("div", "fc-grid");
-      m.cards.forEach(function (c) {
-        var card = el("button", "fc");
+      m.cards.forEach(function (c, i) {
+        var key = id + ":" + i;
+        var state = GRADES[key]; // 'correct' | 'wrong' | undefined
+        var card = el("div", "fc" + (state ? " fc-" + state : ""));
         card.innerHTML =
           '<div class="fc-inner">' +
             '<div class="fc-face fc-q"><span class="fc-tag">Q</span><span class="fc-txt">' + esc(c.q) + "</span></div>" +
             '<div class="fc-face fc-a"><span class="fc-tag">A</span><span class="fc-txt">' + esc(c.a) + "</span></div>" +
+          "</div>" +
+          '<span class="fc-badge" aria-hidden="true"></span>' +
+          '<div class="fc-grade">' +
+            '<button type="button" class="fc-mark fc-yes" title="I got this right">&#10003; Got it</button>' +
+            '<button type="button" class="fc-mark fc-no" title="I got this wrong">&#10007; Missed</button>' +
           "</div>";
-        card.addEventListener("click", function () { card.classList.toggle("flip"); });
+        var inner = $(".fc-inner", card);
+        inner.addEventListener("click", function () { card.classList.toggle("flip"); });
+        var setGrade = function (val) {
+          if (GRADES[key] === val) { delete GRADES[key]; }   // tap again to clear
+          else { GRADES[key] = val; }
+          card.classList.remove("fc-correct", "fc-wrong");
+          if (GRADES[key]) card.classList.add("fc-" + GRADES[key]);
+          updateScore();
+          persistGrades();
+        };
+        $(".fc-yes", card).addEventListener("click", function () { setGrade("correct"); });
+        $(".fc-no", card).addEventListener("click", function () { setGrade("wrong"); });
         grid.appendChild(card);
       });
       frag.appendChild(grid);
@@ -762,9 +854,11 @@ const MODULES = [{"id":1,"core":1,"title":"What IT Specialists Do & Troubleshoot
   /* ---------- reset ---------- */
   function wireReset() {
     $("#resetBtn").addEventListener("click", function () {
-      if (!window.confirm("Clear all progress? This resets every completed module.")) return;
+      if (!window.confirm("Clear all progress? This resets every completed module and all flashcard marks.")) return;
       DONE = {};
+      GRADES = {};
       persist();
+      persistGrades();
       syncLayerState();
       if (currentId) openModule(currentId, false); else openOverview();
     });
